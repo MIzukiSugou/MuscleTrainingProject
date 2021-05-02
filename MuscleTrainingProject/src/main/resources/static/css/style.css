@@ -1,0 +1,24 @@
+  * {
+ margin: 0;
+ padding: 0; 
+}
+ul {
+  list-style:none;
+}
+div {
+  padding: 0 30px;
+}
+.header__flex {
+  display: flex;
+  height:60px;
+  align-items: center;
+}
+.header__flex nav {
+  margin-left: auto;
+}
+.header__flex ul {
+  display: flex;
+}
+.header__flex ul li {
+  margin-left: 20px;
+}

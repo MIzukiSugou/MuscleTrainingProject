@@ -1,0 +1,84 @@
+<!--アカウント作成画面 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="${title}"></title>
+</head>
+<body>
+<h2 th:text="${title}"></h2>
+	<form method="post" th:action="@{/create/execution}" th:object="${createForm}">
+    	<table>
+    		<tr>
+				<th>ユーザーＩＤ</th>
+                <td>
+                	<div>
+                    	<input id="userId" name="userId" type="text" th:value="*{userId}">
+                        <div th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
+                        <br><div th:text="${message}"></div>
+                    </div>
+                </td>
+           	</tr>
+            <tr>
+            	<th>姓</th>
+                <td>
+                	<div>
+                    	<input id="firstName" name="firstName" type="text" th:value="*{firstName}">
+						<div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                    </div>
+               	</td>
+            </tr>
+    		<tr>
+				<th>名</th>
+                <td>
+                	<div>
+                    	<input id="lastName" name="lastName" type="text" th:value="*{lastName}">
+                        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                    </div>
+                </td>
+           	</tr>
+            <tr>
+            	<th>セイ</th>
+                <td>
+                	<div>
+                    	<input id="firstNameKana" name="firstNameKana" type="text" th:value="*{firstNameKana}">
+						<div th:if="${#fields.hasErrors('firstNameKana')}" th:errors="*{firstNameKana}"></div>
+                    </div>
+               	</td>
+            </tr>
+            <tr>
+				<th>メイ</th>
+                <td>
+                	<div>
+                    	<input id="lastNameKana" name="lastNameKana" type="text" th:value="*{lastNameKana}">
+                        <div th:if="${#fields.hasErrors('lastNameKana')}" th:errors="*{lastNameKana}"></div>
+                    </div>
+                </td>
+           	</tr>
+            <tr>
+            	<th>パスワード</th>
+                <td>
+                	<div>
+                    	<input id="password" name="password" type="password" th:value="*{password}">
+						<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                    </div>
+               	</td>
+            </tr>
+            <tr>
+            	<th>パスワード（確認用）</th>
+                <td>
+                	<div>
+                    	<input id="passwordConfirm" name="passwordConfirm" type="password" th:value="*{passwordConfirm}">
+						<div th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
+						<div th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div>
+                    </div>
+               	</td>
+            </tr>
+        </table>
+        <p>
+    	<input type="submit" name="execution" value="確認" />
+		<input type="submit" name="back" value="戻る" />
+		</p>
+	</form>
+</body>
+</html>

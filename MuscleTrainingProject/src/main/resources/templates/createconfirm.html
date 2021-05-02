@@ -1,0 +1,78 @@
+<!--アカウント作成確認画面 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:text="${title}"></title>
+</head>
+<body>
+	<h2 th:text="${title}"></h2>
+	<div th:object="${createForm}">
+		<p>入力内容をご確認ください</p>
+		<table>
+			<tr>
+				<th>ユーザーＩＤ</th>
+				<td>
+					<div>
+						<span th:text="*{userId}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>姓</th>
+				<td>
+					<div>
+						<span th:text="*{firstName}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>名</th>
+				<td>
+					<div>
+						<span th:text="*{lastName}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>セイ</th>
+				<td>
+					<div>
+						<span th:text="*{firstNameKana}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>メイ</th>
+				<td>
+					<div>
+						<span th:text="*{lastNameKana}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>パスワード</th>
+				<td>
+					<div>
+						<span th:text="*{password}"></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<form method="post" action="#"
+			th:action="@{/create/confirm}">
+			<input type="hidden" name="userId" th:value="*{userId}">
+			<input type="hidden" name="firstName" th:value="*{firstName}">
+			<input type="hidden" name="lastName" th:value="*{lastName}">
+			<input type="hidden" name=firstNameKana th:value="*{firstNameKana}">
+			<input type="hidden" name="lastNameKana" th:value="*{lastNameKana}">
+			<input type="hidden" name="password" th:value="*{password}">
+			<input type="hidden" name="passwordConfirm" th:value="*{passwordConfirm}">
+			<p>
+			<input type="submit" name="execution" value="作成" />
+			<input type="submit" name="back" value="戻る" />
+			</p>
+		</form>
+	</div>
+</body>
+</html>
