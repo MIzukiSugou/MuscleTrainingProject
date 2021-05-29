@@ -5,6 +5,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.entity.Login;
+
 /**
  * 共通処理のServiceクラスです。
  *
@@ -28,6 +30,21 @@ public class CommonService {
        }
 
        return false;
+   }
+   
+   /**
+   * セッションタイムアウトのチェックを行います。
+   *
+   * @param session セッション情報
+   * @return userFullName ログインユーザーフルネーム
+    */
+   public String getUserFullName(HttpSession session) {
+	   
+		// ユーザ情報をセッションから取得
+		Login loginUser = (Login) session.getAttribute(CommonConst.LOGIN_USER);
+		String userFullName = loginUser.getFirstName() + loginUser.getLastName();
+		
+		return userFullName;
    }
 
 }

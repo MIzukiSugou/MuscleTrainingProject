@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.app.common.CommonConst;
-import com.example.demo.app.common.ErrorStatement;
+import com.example.demo.app.create.CreateErrorStatement;
 import com.example.demo.app.login.LoginForm;
 import com.example.demo.domain.entity.Login;
 import com.example.demo.domain.repository.LoginRepositoryImpl;
@@ -47,7 +47,7 @@ public class LoginServiceImpl implements LoginService {
         if (count== 0) {
         	
             // ユーザ情報が存在しない場合
-            form.setErrorMessage(ErrorStatement.LOGIN_ERROR);
+            form.setErrorMessage(CreateErrorStatement.LOGIN_ERROR);
             // ログイン失敗時のユーザ情報更新クエリを実行
             repository.updateLoginFailure(form.getUserId());
             return true;
@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService {
         
         if (loginUser == null) {
             // ユーザ情報が存在しない場合
-            form.setErrorMessage(ErrorStatement.LOGIN_ERROR);
+            form.setErrorMessage(CreateErrorStatement.LOGIN_ERROR);
             return true;
         }
         

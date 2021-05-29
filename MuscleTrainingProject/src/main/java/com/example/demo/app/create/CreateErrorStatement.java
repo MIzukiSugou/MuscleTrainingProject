@@ -1,4 +1,4 @@
-package com.example.demo.app.common;
+package com.example.demo.app.create;
 
 /**
  * エラー文言、正規表現、格納クラス
@@ -6,7 +6,7 @@ package com.example.demo.app.common;
  * @author 菅生 2021/2/18
  *
  */
-public class ErrorStatement {
+public class CreateErrorStatement {
 
 	/**
 	 * [ユーザーＩＤ]未入力時のエラーメッセージ

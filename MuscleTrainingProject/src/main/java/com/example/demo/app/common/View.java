@@ -13,6 +13,10 @@ public class View {
     
     public static final String VIEW_CREATECONFIRM = "アカウント作成確認";
     
+    public static final String VIEW_TRAININGMENU_CREATE = "トレーニングメニュー作成";
+    
+    public static final String VIEW_TRAININGMENU_CREATECONFIRM = "トレーニングメニュー作成確認";
+    
     public static final String VIEW_MENU = "メニュー";
     
     public static final String VIEW_CALENDARRECORD = "トレーニング記録";

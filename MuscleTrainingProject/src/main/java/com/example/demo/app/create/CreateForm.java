@@ -8,8 +8,6 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.util.StringUtils;
 
-import com.example.demo.app.common.ErrorStatement;
-
 /**
  * アカウント作成画面 フォームクラス
  * 
@@ -21,40 +19,40 @@ public class CreateForm implements Serializable{
 	private static final long serialVersionUID = -8237935725232960983L;
 	
 	//ユーザーId
-	@Pattern(regexp = ErrorStatement.PATTERN_USERID, message = ErrorStatement.MISMATCH__USERID_MESSAGE)
-	@NotEmpty(message = ErrorStatement.USERID_NOT_INPUT_MESSAGE)
+	@Pattern(regexp = CreateErrorStatement.PATTERN_USERID, message = CreateErrorStatement.MISMATCH__USERID_MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.USERID_NOT_INPUT_MESSAGE)
 	private String userId;
 	
 	//名
-	@NotEmpty(message = ErrorStatement.LASTNAME_NOT_INPUT_MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.LASTNAME_NOT_INPUT_MESSAGE)
 	private String lastName;
 	
 	//姓
-	@NotEmpty(message = ErrorStatement.FIRSTNAME_NOT_INPUT_MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.FIRSTNAME_NOT_INPUT_MESSAGE)
 	private String firstName;
 	
 	//メイ
-	@Pattern(regexp = ErrorStatement.PATTERN_NAMEKANA, message = ErrorStatement.LASTNAMEKANA__MESSAGE)
-	@NotEmpty(message = ErrorStatement.LASTNAMEKANA_NOT_INPUT_MESSAGE)
+	@Pattern(regexp = CreateErrorStatement.PATTERN_NAMEKANA, message = CreateErrorStatement.LASTNAMEKANA__MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.LASTNAMEKANA_NOT_INPUT_MESSAGE)
 	private String lastNameKana;
 	
 	//セイ
-	@Pattern(regexp = ErrorStatement.PATTERN_NAMEKANA, message = ErrorStatement.FIRSTNAMEKANA__MESSAGE)
-	@NotEmpty(message = ErrorStatement.FIRSTNAMEKANA_NOT_INPUT_MESSAGE)
+	@Pattern(regexp = CreateErrorStatement.PATTERN_NAMEKANA, message = CreateErrorStatement.FIRSTNAMEKANA__MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.FIRSTNAMEKANA_NOT_INPUT_MESSAGE)
 	private String firstNameKana;
 	
 	//パスワード
-	@Pattern(regexp = ErrorStatement.PATTERN_PASSWORD, message = ErrorStatement.MISMATCH_PASSWORD_MESSAGE)
-	@NotEmpty(message = ErrorStatement.PASSWORD_NOT_INPUT_MESSAGE)
+	@Pattern(regexp = CreateErrorStatement.PATTERN_PASSWORD, message = CreateErrorStatement.MISMATCH_PASSWORD_MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.PASSWORD_NOT_INPUT_MESSAGE)
 	private String password;
 	
 	//パスワード（確認用）
-	@Pattern(regexp = ErrorStatement.PATTERN_PASSWORD, message = ErrorStatement.MISMATCH_PASSWORD_MESSAGE)
-	@NotEmpty(message = ErrorStatement.PASSWORDCONFIRM_NOT_INPUT_MESSAGE)
+	@Pattern(regexp = CreateErrorStatement.PATTERN_PASSWORD, message = CreateErrorStatement.MISMATCH_PASSWORD_MESSAGE)
+	@NotEmpty(message = CreateErrorStatement.PASSWORDCONFIRM_NOT_INPUT_MESSAGE)
 	private String passwordConfirm;
 	
 	//パスワードとパスワード（確認用）の一致確認
-	@AssertTrue(message = ErrorStatement.INCONSISTENCY_PASSWORD_MESSAGE)
+	@AssertTrue(message = CreateErrorStatement.INCONSISTENCY_PASSWORD_MESSAGE)
 	public boolean isPasswordValid() {
 		if (StringUtils.isEmpty(password) && StringUtils.isEmpty(passwordConfirm)) {
 			return true;

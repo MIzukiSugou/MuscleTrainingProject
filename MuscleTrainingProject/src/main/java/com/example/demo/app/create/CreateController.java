@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.app.common.ErrorStatement;
 import com.example.demo.app.common.View;
 import com.example.demo.domain.entity.Create;
 import com.example.demo.domain.service.CreateService;
@@ -152,7 +151,7 @@ public class CreateController {
 			return "/create";
 		}
 		
-		model.addAttribute("message", ErrorStatement.CREATECOMPLARE__MESSAGE);
+		model.addAttribute("message", CreateErrorStatement.CREATECOMPLARE__MESSAGE);
 		
 		return "forward:/login/access";
 	}

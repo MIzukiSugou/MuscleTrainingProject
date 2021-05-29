@@ -77,6 +77,9 @@ public class TrainingRecordController {
             return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
         }
 		
+		// ユーザ情報をセッションから取得
+		String userFullName = commonService.getUserFullName(session);
+		
 		// ログインユーザーID登録トレーニングメニューの存在チェック
 		if (!(trainingRecordService.selectMenu(trainingRecordForm,session))) {
 
@@ -95,6 +98,8 @@ public class TrainingRecordController {
 			//TODO　後日実装予定　菅生
 
 		}
+		
+		model.addAttribute("loginUser", userFullName);
 		
 		model.addAttribute("title", View.VIEW_CALENDARRECORD);
 
@@ -122,6 +127,9 @@ public class TrainingRecordController {
             return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
         }
 		
+		// ユーザ情報をセッションから取得
+		String userFullName = commonService.getUserFullName(session);
+        
 		try {
 			//トレーニング記録画面フォームリストの情報をDBに追加を行う
 			trainingRecordService.insertTrainingRecord(trainingRecordForm,session);
@@ -141,6 +149,7 @@ public class TrainingRecordController {
 			return "/trainingrecord";
 		}
 		
+		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("message", RECORD_COMPLETION);
 		model.addAttribute("title", View.VIEW_CALENDARRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
@@ -167,6 +176,9 @@ public class TrainingRecordController {
             return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
         }
 		
+		// ユーザ情報をセッションから取得
+		String userFullName = commonService.getUserFullName(session);
+		
 		try {
 			//トレーニング記録画面フォームリストの情報をDBに更新を行う
 			trainingRecordService.updateTrainingRecord(trainingRecordForm,session);
@@ -179,6 +191,7 @@ public class TrainingRecordController {
 			return "/trainingrecord";
 		}
 		
+		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("message", RECORD_COMPLETION);
 		model.addAttribute("title", View.VIEW_CALENDARRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
@@ -205,12 +218,15 @@ public class TrainingRecordController {
         if (commonService.checkSessionTimeOut(session)) {
             return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
         }
+		
+		// ユーザ情報をセッションから取得
+		String userFullName = commonService.getUserFullName(session);
 
         //トレーニング記録画面フォームのプルダウンで指定している年月日情報から、該当するトレーニング記録を取得する
         trainingRecordService.selectTrainingRecord(trainingRecordForm,session);
         
+		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("title", View.VIEW_CALENDARRECORD);
-		
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
 		return "/trainingrecord";
