@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.app.common.View;
-import com.example.demo.domain.service.LoginServiceImpl;
+import com.example.demo.domain.service.LoginService;
 
 /**
  * ログイン画面　コントローラークラス
@@ -25,10 +25,10 @@ import com.example.demo.domain.service.LoginServiceImpl;
 @RequestMapping(value = "/login")
 public class LoginController {
 
-	private final LoginServiceImpl loginServiceImpl;
+	private final LoginService loginServiceImpl;
 
 	@Autowired
-	public LoginController(LoginServiceImpl loginServiceImpl) {
+	public LoginController(LoginService loginServiceImpl) {
 		this.loginServiceImpl = loginServiceImpl;
 	}
 
