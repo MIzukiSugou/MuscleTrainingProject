@@ -1,0 +1,80 @@
+<!--トレーニングメニュー作成画面 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="${title}"></title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<header id="header">
+			<form method="GET" th:action="@{/login/access}">
+				<div class="header__flex">
+			    	<h2 th:text="${title}"></h2>
+			    	<nav>
+			      	<ul>
+			        	<li><label th:text="${loginUser}"></label></li>
+			        	<li><button class="btn btn-primary" type="submit">Logout</button></li>
+			      	</ul>
+			    	</nav>
+			  	</div>
+				</form>
+			</header>
+			<hr>
+			<br>
+		<form method="post" th:action="@{/trainingMenucreate/execution}" th:object="${createForm}">
+	    	<table>
+	    		<tr>
+					<th>TrainingMenu</th>
+	                <td>
+	                	<div>
+	                    	<input id="trainingMenu" name="trainingMenu" type="text" th:value="*{trainingMenu}">
+	                        <div th:if="${#fields.hasErrors('trainingMenu')}" th:errors="*{trainingMenu}"></div>
+	                        <br><div th:text="${message}"></div>
+	                    </div>
+	                </td>
+	           	</tr>
+	            <tr>
+	            	<th>TrainingTarget</th>
+	                <td>
+	                	<div>
+	                    	<input id="trainingTarget" name="trainingTarget" type="text" th:value="*{trainingTarget}">
+							<div th:if="${#fields.hasErrors('trainingTarget')}" th:errors="*{trainingTarget}"></div>
+	                    </div>
+	               	</td>
+	            </tr>
+	    		<tr>
+					<th>TrainingSabTarget1</th>
+	                <td>
+	                	<div>
+	                    	<input id="trainingSabTarget1" name="trainingSabTarget1" type="text" th:value="*{trainingSabTarget1}">
+	                        <div th:if="${#fields.hasErrors('trainingSabTarget1')}" th:errors="*{trainingSabTarget1}"></div>
+	                    </div>
+	                </td>
+	           	</tr>
+	            <tr>
+	            	<th>TrainingSabTarget2</th>
+	                <td>
+	                	<div>
+	                    	<input id="trainingSabTarget2" name="trainingSabTarget2" type="text" th:value="*{trainingSabTarget2}">
+							<div th:if="${#fields.hasErrors('trainingSabTarget2')}" th:errors="*{trainingSabTarget2}"></div>
+	                    </div>
+	               	</td>
+	            </tr>
+	            <tr>
+					<th>TrainingSabTarget3</th>
+	                <td>
+	                	<div>
+	                    	<input id="trainingSabTarget3" name="trainingSabTarget3" type="text" th:value="*{trainingSabTarget3}">
+	                        <div th:if="${#fields.hasErrors('trainingSabTarget3')}" th:errors="*{trainingSabTarget3}"></div>
+	                    </div>
+	                </td>
+	           	</tr>
+	        </table>
+	        <p>
+	    	<input type="submit" name="execution" value="確認" />
+			<input type="submit" name="back" value="戻る" />
+			</p>
+		</form>
+	</body>
+</html>
