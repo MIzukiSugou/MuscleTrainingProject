@@ -1,8 +1,5 @@
 package com.example.demo.app.create;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,29 +26,7 @@ import com.example.demo.domain.service.CreateService;
 @RequestMapping(value = "/create")
 public class CreateController {
 	
-	/** ユーザーＩＤが既に存在する場合のエラーメッセージ */
-	private static final String ERRORMESSAGE = "既に存在するユーザーＩＤです。";
-	
-	/**　新規登録時、アカウント権限「一般」*/
-	private static final String AUTHORITY = "2";
-	
-	/**　新規登録時、ログイン回数「0回」*/
-	private static final String LOGINFAILURECOUNT = "0";
-	
-	/**　新規登録時、ログイン失敗回数「0回」*/
-	private static final String LOGINCOUNT = "0";
-	
-	/**　新規登録時、アカウントロックフラグ「ロック無し」*/
-	private static final String ACCOUNTLOCKFLAG = "0";
-	
-	/**　新規登録時、削除フラグ「削除無し」*/
-	private static final String DELETEFLAG = "0";
-	
-	/** 現在日付ををYYYY/MM/DDの形で取得 */
-	Calendar today = Calendar.getInstance();
-    SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyy/MM/dd");
-    String strToday = yyyymmdd.format(today.getTime());
-	
+    /**アカウント作成画面Service */
 	private final CreateService createService;
 
 	@Autowired
@@ -109,6 +84,7 @@ public class CreateController {
 	 * @param model　モデル情報
 	 * @param redirectAttridutes	
 	 * @param session
+	 * @param create アカウント作成エンティティ
 	 * @return　アカウント作成画面またはメニュー画面
 	 */
 	@RequestMapping(value = "/confirm", params = "execution", method = RequestMethod.POST)
@@ -116,34 +92,19 @@ public class CreateController {
 			BindingResult result,
 			Model model,
 			RedirectAttributes redirectAttridutes,
-			HttpSession session) {
+			HttpSession session,
+			Create create) {
 		
 		// 入力値エラーチェック
 		if (result.hasErrors()) {
 			return "/create";
 		}
 
-		Create create = new Create();
-		create.setUserId(createForm.getUserId());
-		create.setLastName(createForm.getLastName());
-		create.setFirstName(createForm.getFirstName());
-		create.setLastNameKana(createForm.getLastNameKana());
-		create.setFirstNameKana(createForm.getFirstNameKana());
-		create.setPassword(createForm.getPassword());
-		create.setAuthority(AUTHORITY);
-		create.setLoginCount(LOGINCOUNT);
-		create.setLoginFailureCount(LOGINFAILURECOUNT);
-		create.setAccountLockFlag(ACCOUNTLOCKFLAG);
-		create.setInsertDate(strToday);
-		create.setInsertUser(createForm.getUserId());
-		create.setUpdateUser(createForm.getUserId());
-		create.setDeleteFlag(DELETEFLAG);
-
 		try {
-			createService.insertUser(create);
+			createService.insertUser(create,createForm);
 			
 		}catch (DuplicateKeyException e) {
-			model.addAttribute("message", ERRORMESSAGE);
+			model.addAttribute("message", CreateErrorStatement.USERID_DUPLICATE_REGISTRATION);
 			return "/create";
 			
 		} catch (Exception e) {

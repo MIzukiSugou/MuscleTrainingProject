@@ -74,6 +74,11 @@ public class CreateErrorStatement {
 	public static final String LOGIN_ERROR = "※ユーザーＩＤまたはパスワードの入力に誤りがあります。";
 	
 	/**
+	 * [ユーザーＩＤ]重複登録時のエラーメッセージ
+	 */
+	public static final String USERID_DUPLICATE_REGISTRATION = "※入力されたユーザーＩＤは既に登録されております。";
+	
+	/**
 	 * 全角カタカナ以外
 	 */
 	public static final String PATTERN_NAMEKANA = "^[ァ-ンヴー]*$";
