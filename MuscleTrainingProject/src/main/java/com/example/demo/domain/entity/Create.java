@@ -23,7 +23,7 @@ public class Create {
 	//セイ
 	private String firstNameKana;
 		
-	//パスワード
+	//PASSWORD
 	private String password;
 	
 	//権限

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.common.CommonService;
 import com.example.demo.app.common.View;
+import com.example.demo.domain.entity.Login;
 
 /**
  *メニュー画面　コントローラークラス
@@ -46,7 +47,8 @@ public class MenuController {
         }
 		
 		// ユーザ情報をセッションから取得
-		String userFullName = commonService.getUserFullName(session);
+        Login loginUser = commonService.getUserFullName(session);
+        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
 		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("title",View.VIEW_MENU);

@@ -7,21 +7,19 @@ package com.example.demo.app.common;
  */
 public class View {
 	
-    public static final String VIEW_LOGIN = "ログイン";
+    public static final String VIEW_LOGIN = "LOGIN";
     
-    public static final String VIEW_CREATE = "アカウント作成";
+    public static final String VIEW_CREATE = "CREATE AN ACCOUNT";
     
-    public static final String VIEW_CREATECONFIRM = "アカウント作成確認";
+    public static final String VIEW_CREATECONFIRM = "CREATE AN ACCOUNT CONFIRM";
     
-    public static final String VIEW_TRAININGMENU_CREATE = "トレーニングメニュー作成";
+    public static final String VIEW_TRAININGMENU_CREATE = "TRAININGMENU CREATE";
     
-    public static final String VIEW_TRAININGMENU_CREATECONFIRM = "トレーニングメニュー作成確認";
+    public static final String VIEW_TRAININGMENU_CREATECONFIRM = "TRAININGMENU CREATE CONFIRM";
     
-    public static final String VIEW_MENU = "メニュー";
+    public static final String VIEW_MENU = "MENU";
     
-    public static final String VIEW_CALENDARRECORD = "トレーニング記録";
+    public static final String VIEW_TRAININGRECORD = "TRAINING RECORD";
     
-    public static final String VIEW_MENUREGISTRATION = "メニュー登録";
-    
-    public static final String VIEW_PHYSICALRECORD = "身体記録";
+    public static final String VIEW_PHYSICALRECORD = "PHYSICAL RECORD";
 }

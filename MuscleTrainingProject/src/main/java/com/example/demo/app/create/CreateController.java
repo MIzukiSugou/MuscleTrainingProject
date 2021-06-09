@@ -65,13 +65,15 @@ public class CreateController {
 			RedirectAttributes redirectAttridutes,
 			HttpSession session) {
 		
-		model.addAttribute("title",View.VIEW_CREATECONFIRM);
 		
 		// 入力値エラーチェック
 		if (result.hasErrors()) {
+			model.addAttribute("title",View.VIEW_CREATE);
 			return "/create";
+			
 		}
 		
+		model.addAttribute("title",View.VIEW_CREATECONFIRM);
 		return "/createconfirm";
 		
 	}
@@ -97,6 +99,7 @@ public class CreateController {
 		
 		// 入力値エラーチェック
 		if (result.hasErrors()) {
+			model.addAttribute("title",View.VIEW_CREATE);
 			return "/create";
 		}
 
@@ -104,11 +107,13 @@ public class CreateController {
 			createService.insertUser(create,createForm);
 			
 		}catch (DuplicateKeyException e) {
-			model.addAttribute("message", CreateErrorStatement.USERID_DUPLICATE_REGISTRATION);
+			createForm.setMessage(CreateErrorStatement.USERID_DUPLICATE_REGISTRATION);
+			model.addAttribute("title",View.VIEW_CREATE);
 			return "/create";
 			
 		} catch (Exception e) {
-			model.addAttribute("message",  e.getMessage());
+			createForm.setMessage(e.getMessage());
+			model.addAttribute("title",View.VIEW_CREATE);
 			return "/create";
 		}
 		

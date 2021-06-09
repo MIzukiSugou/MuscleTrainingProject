@@ -1,0 +1,68 @@
+<!--トレーニングメニュー作成確認画面 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"></meta>
+<title th:text="${title}"></title>
+</head>
+<body>
+	<h2 th:text="${title}"></h2>
+	<div th:object="${trainingMenuCreateForm}">
+		<p>入力内容をご確認ください</p>
+		<table>
+			<tr>
+				<th>TrainingMenu</th>
+				<td>
+					<div>
+						<span th:text="*{trainingMenu}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>TrainingTarget</th>
+				<td>
+					<div>
+						<span th:text="*{trainingTarget}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>TrainingSabTarget1</th>
+				<td>
+					<div>
+						<span th:text="*{trainingSabTarget1}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>TrainingSabTarget2</th>
+				<td>
+					<div>
+						<span th:text="*{trainingSabTarget2}"></span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th>TrainingSabTarget3</th>
+				<td>
+					<div>
+						<span th:text="*{trainingSabTarget3}"></span>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<form method="post" action="#"
+			th:action="@{/trainingMenucreate/confirm}">
+			<input type="hidden" name="trainingMenu" th:value="*{trainingMenu}">
+			<input type="hidden" name="trainingTarget" th:value="*{trainingTarget}">
+			<input type="hidden" name="trainingSabTarget1" th:value="*{trainingSabTarget1}">
+			<input type="hidden" name="trainingSabTarget2" th:value="*{trainingSabTarget2}">
+			<input type="hidden" name="trainingSabTarget3" th:value="*{trainingSabTarget3}">
+			<p>
+			<input type="submit" name="execution" value="作成" />
+			<input type="submit" name="back" value="戻る" />
+			</p>
+		</form>
+	</div>
+</body>
+</html>

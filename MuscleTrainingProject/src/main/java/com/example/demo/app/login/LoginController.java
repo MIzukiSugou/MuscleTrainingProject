@@ -78,7 +78,7 @@ public class LoginController {
 		// 社員番号存在チェック
 		if (loginServiceImpl.checkInput(form)) {
 
-			// 社員番号・パスワード不一致
+			// 社員番号・PASSWORD不一致
 			model.addAttribute("errorMessage", form.getErrorMessage());
 			return "/login";
 		}

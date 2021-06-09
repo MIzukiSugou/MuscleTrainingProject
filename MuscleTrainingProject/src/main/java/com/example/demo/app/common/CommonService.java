@@ -33,18 +33,17 @@ public class CommonService {
    }
    
    /**
-   * セッションタイムアウトのチェックを行います。
+   * セッションからログインユーザーの情報取得を行います。
    *
    * @param session セッション情報
-   * @return userFullName ログインユーザーフルネーム
+   * @return loginUser ログインユーザー情報
     */
-   public String getUserFullName(HttpSession session) {
+   public Login getUserFullName(HttpSession session) {
 	   
 		// ユーザ情報をセッションから取得
 		Login loginUser = (Login) session.getAttribute(CommonConst.LOGIN_USER);
-		String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
-		return userFullName;
+		return loginUser;
    }
 
 }

@@ -18,6 +18,9 @@ public class CreateForm implements Serializable{
 
 	private static final long serialVersionUID = -8237935725232960983L;
 	
+	//メッセージ
+	private String message;
+	
 	//ユーザーId
 	@Pattern(regexp = CreateErrorStatement.PATTERN_USERID, message = CreateErrorStatement.MISMATCH__USERID_MESSAGE)
 	@NotEmpty(message = CreateErrorStatement.USERID_NOT_INPUT_MESSAGE)
@@ -41,17 +44,17 @@ public class CreateForm implements Serializable{
 	@NotEmpty(message = CreateErrorStatement.FIRSTNAMEKANA_NOT_INPUT_MESSAGE)
 	private String firstNameKana;
 	
-	//パスワード
+	//PASSWORD
 	@Pattern(regexp = CreateErrorStatement.PATTERN_PASSWORD, message = CreateErrorStatement.MISMATCH_PASSWORD_MESSAGE)
 	@NotEmpty(message = CreateErrorStatement.PASSWORD_NOT_INPUT_MESSAGE)
 	private String password;
 	
-	//パスワード（確認用）
+	//PASSWORD（確認用）
 	@Pattern(regexp = CreateErrorStatement.PATTERN_PASSWORD, message = CreateErrorStatement.MISMATCH_PASSWORD_MESSAGE)
 	@NotEmpty(message = CreateErrorStatement.PASSWORDCONFIRM_NOT_INPUT_MESSAGE)
 	private String passwordConfirm;
 	
-	//パスワードとパスワード（確認用）の一致確認
+	//PASSWORDとPASSWORD（確認用）の一致確認
 	@AssertTrue(message = CreateErrorStatement.INCONSISTENCY_PASSWORD_MESSAGE)
 	public boolean isPasswordValid() {
 		if (StringUtils.isEmpty(password) && StringUtils.isEmpty(passwordConfirm)) {
@@ -118,6 +121,14 @@ public class CreateForm implements Serializable{
 
 	public void setPasswordConfirm(String passwordConfirm) {
 		this.passwordConfirm = passwordConfirm;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 }

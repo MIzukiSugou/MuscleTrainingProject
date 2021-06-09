@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.common.CommonService;
 import com.example.demo.app.common.View;
+import com.example.demo.domain.entity.Login;
 import com.example.demo.domain.service.TrainingRecordService;
 
 /**
@@ -78,7 +79,8 @@ public class TrainingRecordController {
         }
 		
 		// ユーザ情報をセッションから取得
-		String userFullName = commonService.getUserFullName(session);
+        Login loginUser = commonService.getUserFullName(session);
+        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
 		// ログインユーザーID登録トレーニングメニューの存在チェック
 		if (!(trainingRecordService.selectMenu(trainingRecordForm,session))) {
@@ -101,7 +103,7 @@ public class TrainingRecordController {
 		
 		model.addAttribute("loginUser", userFullName);
 		
-		model.addAttribute("title", View.VIEW_CALENDARRECORD);
+		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
@@ -128,7 +130,8 @@ public class TrainingRecordController {
         }
 		
 		// ユーザ情報をセッションから取得
-		String userFullName = commonService.getUserFullName(session);
+        Login loginUser = commonService.getUserFullName(session);
+        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
         
 		try {
 			//トレーニング記録画面フォームリストの情報をDBに追加を行う
@@ -137,21 +140,21 @@ public class TrainingRecordController {
 		//既に同日にトレーニングのDBへの追加が行われていた場合の処理	
 		}catch (DuplicateKeyException e) {
 			model.addAttribute("message", TODAY_REGISTERED);
-			model.addAttribute("title", View.VIEW_CALENDARRECORD);
+			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
 			return "/trainingrecord";
 		
 		//その他DB追加時のエラー時の処理	
 		} catch (Exception e) {
 			model.addAttribute("message",  e.getMessage());
-			model.addAttribute("title", View.VIEW_CALENDARRECORD);
+			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
 			return "/trainingrecord";
 		}
 		
 		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("message", RECORD_COMPLETION);
-		model.addAttribute("title", View.VIEW_CALENDARRECORD);
+		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
 		return "/trainingrecord";
@@ -177,7 +180,8 @@ public class TrainingRecordController {
         }
 		
 		// ユーザ情報をセッションから取得
-		String userFullName = commonService.getUserFullName(session);
+        Login loginUser = commonService.getUserFullName(session);
+        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
 		try {
 			//トレーニング記録画面フォームリストの情報をDBに更新を行う
@@ -186,14 +190,14 @@ public class TrainingRecordController {
 		//その他DB追加時のエラー時の処理	
 		} catch (Exception e) {
 			model.addAttribute("message",  e.getMessage());
-			model.addAttribute("title", View.VIEW_CALENDARRECORD);
+			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
 			return "/trainingrecord";
 		}
 		
 		model.addAttribute("loginUser", userFullName);
 		model.addAttribute("message", RECORD_COMPLETION);
-		model.addAttribute("title", View.VIEW_CALENDARRECORD);
+		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
 		return "/trainingrecord";
@@ -220,13 +224,14 @@ public class TrainingRecordController {
         }
 		
 		// ユーザ情報をセッションから取得
-		String userFullName = commonService.getUserFullName(session);
+        Login loginUser = commonService.getUserFullName(session);
+        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 
         //トレーニング記録画面フォームのプルダウンで指定している年月日情報から、該当するトレーニング記録を取得する
         trainingRecordService.selectTrainingRecord(trainingRecordForm,session);
         
 		model.addAttribute("loginUser", userFullName);
-		model.addAttribute("title", View.VIEW_CALENDARRECORD);
+		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
 		return "/trainingrecord";

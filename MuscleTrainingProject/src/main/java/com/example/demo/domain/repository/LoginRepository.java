@@ -24,10 +24,10 @@ public class LoginRepository {
 	}
 
 	/**
-	 * ログインID/パスワードの存在をチェックします。
+	 * ログインID/PASSWORDの存在をチェックします。
 	 *
 	 * @param userId   ユーザID
-	 * @param password パスワード
+	 * @param password PASSWORD
 	 * @return レコード数
 	 */
 	public int checkLogin(String userId, String password) {

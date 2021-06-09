@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.create.CreateErrorStatement;
+import com.example.demo.app.login.LoginErrorStatement;
 import com.example.demo.app.login.LoginForm;
 import com.example.demo.domain.entity.Login;
 import com.example.demo.domain.repository.LoginRepository;
@@ -46,7 +47,7 @@ public class LoginService {
         if (count== 0) {
         	
             // ユーザ情報が存在しない場合
-            form.setErrorMessage(CreateErrorStatement.LOGIN_ERROR);
+            form.setErrorMessage(LoginErrorStatement.LOGIN_ERROR);
             // ログイン失敗時のユーザ情報更新クエリを実行
             repository.updateLoginFailure(form.getUserId());
             return true;
@@ -73,7 +74,7 @@ public class LoginService {
         
         if (loginUser == null) {
             // ユーザ情報が存在しない場合
-            form.setErrorMessage(CreateErrorStatement.LOGIN_ERROR);
+            form.setErrorMessage(LoginErrorStatement.LOGIN_ERROR);
             return true;
         }
         
