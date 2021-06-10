@@ -21,6 +21,9 @@ public class CreateForm implements Serializable{
 	//メッセージ
 	private String message;
 	
+	//CREATE（false） CONFIRM(true) 制御フラグ
+	private boolean control;
+	
 	//ユーザーId
 	@Pattern(regexp = CreateErrorStatement.PATTERN_USERID, message = CreateErrorStatement.MISMATCH__USERID_MESSAGE)
 	@NotEmpty(message = CreateErrorStatement.USERID_NOT_INPUT_MESSAGE)
@@ -65,6 +68,14 @@ public class CreateForm implements Serializable{
 			}
 			return false;
 		}
+	}
+	
+	public boolean isControl() {
+		return control;
+	}
+
+	public void setControl(boolean control) {
+		this.control = control;
 	}
 
 	public String getUserId() {

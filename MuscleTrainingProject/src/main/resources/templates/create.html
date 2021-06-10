@@ -55,38 +55,50 @@
   <form method="post" th:action="@{/create/execution}" th:object="${createForm}">
     <img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" th:src="@{/image/icon/trainhard.jpg}" alt="" width="250" height="230">
     <div class="mb-5">
-	    <input class="form-control" maxlength='6' placeholder="USERID" id="userId" name="userId" type="text" th:value="*{userId}" th:errorclass="is-invalid" th:classappend="*{message!=null}?'is-invalid'" autofocus>
+	    <input class="form-control" maxlength='6' placeholder="USERID" id="userId" name="userId" type="text" th:value="*{userId}" th:errorclass="is-invalid" th:classappend="*{message!=null}?'is-invalid'" th:readonly="*{control}" autofocus>
 	    <div class="create-color-red" th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></div>
 	    <div class="create-color-red" th:text="*{message}"></div>
 	    
-	    <input class="form-control" placeholder="FIRSTNAME" id="firstName" name="firstName" type="text" th:value="*{firstName}" th:errorclass="is-invalid">
+	    <input class="form-control" placeholder="FIRSTNAME" id="firstName" name="firstName" type="text" th:value="*{firstName}" th:errorclass="is-invalid" th:readonly="*{control}">
 	    <div class="create-color-red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
 	    
-	    <input class="form-control" placeholder="LASTNAME" id="lastName" name="lastName" type="text" th:value="*{lastName}" th:errorclass="is-invalid">
+	    <input class="form-control" placeholder="LASTNAME" id="lastName" name="lastName" type="text" th:value="*{lastName}" th:errorclass="is-invalid" th:readonly="*{control}">
 	    <div class="create-color-red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
 	    
-	    <input class="form-control" placeholder="FIRSTNAMEKANA" id="firstNameKana" name="firstNameKana" type="text" th:value="*{firstNameKana}" th:errorclass="is-invalid">
+	    <input class="form-control" placeholder="FIRSTNAMEKANA" id="firstNameKana" name="firstNameKana" type="text" th:value="*{firstNameKana}" th:errorclass="is-invalid" th:readonly="*{control}">
 	    <div class="create-color-red" th:if="${#fields.hasErrors('firstNameKana')}" th:errors="*{firstNameKana}"></div>
 	    
-	    <input class="form-control" placeholder="LASTNAMEKANA" id="lastNameKana" name="lastNameKana" type="text" th:value="*{lastNameKana}" th:errorclass="is-invalid">
+	    <input class="form-control" placeholder="LASTNAMEKANA" id="lastNameKana" name="lastNameKana" type="text" th:value="*{lastNameKana}" th:errorclass="is-invalid" th:readonly="*{control}">
 	    <div class="create-color-red" th:if="${#fields.hasErrors('lastNameKana')}" th:errors="*{lastNameKana}"></div>
 	    
-	    <input class="form-control" placeholder="PASSWORD" id="password" name="password" type="text" th:value="*{password}" th:errorclass="is-invalid" th:classappend="${#fields.hasErrors('passwordValid')}?'is-invalid'">
+	    <input class="form-control" placeholder="PASSWORD" id="password" name="password" type="password" th:value="*{password}" th:errorclass="is-invalid" th:classappend="${#fields.hasErrors('passwordValid')}?'is-invalid'" th:readonly="*{control}">
 	    <div class="create-color-red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
 	    
-	    <input class="form-control" placeholder="PASSWORDCONFIRM" id="passwordConfirm" name="passwordConfirm" type="text" th:value="*{passwordConfirm}" th:errorclass="is-invalid" th:classappend="${#fields.hasErrors('passwordValid')}?'is-invalid'">
-	    <div class="create-color-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
-		<div class="create-color-red" th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div>
+    	<!-- ここから条件で表示切り替え -->
+    	<th:block th:if="*{control}==false">	    
+	    	<input class="form-control" placeholder="PASSWORDCONFIRM" id="passwordConfirm" name="passwordConfirm" type="password" th:value="*{passwordConfirm}" th:errorclass="is-invalid" th:classappend="${#fields.hasErrors('passwordValid')}?'is-invalid'">
+	    	<div class="create-color-red" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}"></div>
+			<div class="create-color-red" th:if="${#fields.hasErrors('passwordValid')}" th:errors="*{passwordValid}"></div>
+    	</th:block>
+    	<!-- ここから条件で非表示切り替え -->
+    	<th:block th:if="*{control}==true">	    
+	    	<input type="hidden" id="passwordConfirm" name="passwordConfirm" th:value="*{passwordConfirm}">
+    	</th:block>    	
+    	
     </div>
-    <p><button class="w-100 btn btn-lg btn-primary" type="submit" name="execution">CONFIRM</button></p>
-    
-    <p><button class="w-100 btn btn-lg btn-primary" type="submit" name="back">BACK</button></p>
-
+    <!-- ここから条件で表示切り替え -->
+    <th:block th:if="*{control}==false">
+     	<p><button class="w-100 btn btn-lg btn-primary" type="submit" name="execution_confirm">CONFIRM</button></p>
+    	<p><button class="w-100 btn btn-lg btn-primary" type="submit" name="back_login">BACK</button></p>
+	</th:block>
+	<!-- ここから条件で非表示切り替え -->
+    <th:block th:if="*{control}==true">
+    	<p><button class="w-100 btn btn-lg btn-primary" type="submit" name="execution_create">CREATE</button></p>
+    	<p><button class="w-100 btn btn-lg btn-primary" type="submit" name="back_create">BACK</button></p>
+	</th:block>
+	
     <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
   </form>
 </main>
-
-
-    
   </body>
 </html>
