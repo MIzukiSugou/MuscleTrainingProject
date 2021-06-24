@@ -1,24 +1,51 @@
-  * {
- margin: 0;
- padding: 0; 
+html,
+body {
+  height: 100%;
 }
-ul {
-  list-style:none;
-}
-div {
-  padding: 0 30px;
-}
-.header__flex {
+
+body {
   display: flex;
-  height:60px;
   align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #ffffff;
+  font-family: 'Staatliches', cursive;
 }
-.header__flex nav {
-  margin-left: auto;
+
+.error-color-red { 
+	color: #c00;
+	text-align: left;
 }
-.header__flex ul {
-  display: flex;
+
+input.input-error {
+    border: 1px solid #c00;
 }
-.header__flex ul li {
-  margin-left: 20px;
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
