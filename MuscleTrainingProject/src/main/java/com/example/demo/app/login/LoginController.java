@@ -90,7 +90,7 @@ public class LoginController {
 			return "/login";
 		}
 
-		return "forward:/menu/access";
+		return "forward:/calendarrecord/access";
 	}
 
 }

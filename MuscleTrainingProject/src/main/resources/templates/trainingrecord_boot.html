@@ -1,0 +1,140 @@
+<!--トレーニング記録画面 -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	    <link rel="icon" href="../../../../favicon.ico">
+	
+	    <title th:text="${title}"></title>
+	
+    	<!-- Bootstrap core CSS -->
+		<link href=https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css th:href="@{/css/bootstrap.min.css}"　rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	
+	    <!-- Custom styles for this template -->
+	    <link th:href="@{/css/confirm.css}" rel="stylesheet">
+	    
+		<!-- Favicons -->
+		<link rel="apple-touch-icon" th:href="@{/image/icon/trainhard.jpg}" sizes="180x180">
+		<link rel="icon" th:href="@{/image/icon/trainhard.jpg}" sizes="32x32" type="image/png">
+		<link rel="icon" th:href="@{/image/icon/trainhard.jpg}" sizes="16x16" type="image/png">
+		<link rel="manifest" th:href="@{/image/icon/trainhard.jpg}">
+		<link rel="mask-icon" th:href="@{/image/icon/trainhard.jpg}" color="#7952b3">
+		<link rel="icon" th:href="@{/image/icon/trainhard.jpg}">
+		<meta name="theme-color" content="#7952b3">
+		
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    
+  	</head>
+
+  <body>
+	<div th:replace="~{block/header::headerA}"></div>
+    <main class="container">
+    	<div class="starter-template text-center py-5 px-3">
+        	<h1 th:text="${title}"></h1>
+        	<img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" th:src="@{/image/icon/trainhard.jpg}" alt="" width="250" height="230">
+      	</div>   
+			 <form method="post" th:action="@{/calendarrecord/confirm}" th:object="${trainingRecordForm}">
+				<!-- 当日日付 -->		    	
+				<div align="left">
+					<label th:text="*{year}"></label>
+					<span> 年</span>    		
+					<label th:text="*{month}"></label>    		
+					<span> 月</span>    		
+					<label th:text="*{day}"></label>    		
+					<span> 日</span>    		
+				</div>	    	
+				<div th:text="${message}"></div>	    
+					<div align="right">	    
+					<select id="date" name="date">
+						<option th:each="date: ${trainingRecordForm.pulldownDate}" th:value="${date.value}" th:selected="${date.value == trainingRecordForm.date}" th:inline="text">[[${date.value}]]</option>
+					</select>		
+						
+						<input class="btn btn-secondary" type="submit" name="confirmation" value="確認" />	    	
+						
+						<!-- 記録ボタン：活性 -->
+						<th:block th:if="*{recordsFlg}==0">	    
+							<input class="btn btn-secondary" type="submit" name="records" value="記録" />    
+						</th:block>
+						
+						<!-- 記録ボタン：非活性 -->		
+						<th:block th:if="*{recordsFlg}==1">	
+							<input class="btn btn-secondary" type="submit" name="records" value="記録" disabled/>		
+						</th:block>	
+							
+						<!-- 更新ボタン：活性 -->
+						<th:block th:if="*{updateFlg}==0">
+							<input class="btn btn-secondary" type="submit" name="update" value="更新" />
+						</th:block>
+							
+						<!-- 更新ボタン：非活性 -->
+						<th:block th:if="*{updateFlg}==1">
+							<input class="btn btn-secondary" type="submit" name="update" value="更新" disabled/>
+						</th:block>
+							
+						<input class="btn btn-secondary" type="submit" name="confirmation" value="削除" />
+					</div>
+			      
+			<table class="table table-striped">
+				<thead>
+					<tr class="center">
+						<th>TrainingMenu</th>
+						<th></th>
+						<th>Weight</th>
+						<th>St1</th>
+						<th>St2</th>	
+						<th>St3</th>
+						<th>St4</th>
+						<th>St5</th>
+						<th>St6</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="trainingRecordListForm,stat : *{trainingRecordList}">   <!-- サーバで設定されたデータを表示 -->
+					<!-- 以下は表示用 -->
+					<td class="center" th:text="${trainingRecordListForm.menu}">kg</td>
+					<td class="center"><input type="checkbox" th:field="*{trainingRecordList[__${stat.index}__].implementationFlag}" th:value="1" th:checked="*{trainingRecordList[__${stat.index}__].implementationFlag == '1'}"></td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].weight}" />kg</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st1}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st2}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st3}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st4}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st5}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st6}" />reps</td>		        
+					<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].total}" />reps</td>		        
+					<!-- 以下はpost送信用 -->		        
+					<td style='display	:none;'>		       
+						<input type="hidden" th:field="*{trainingRecordList[__${stat.index}__].menu}" />		          
+					</td>		        
+					</tr>
+				</tbody>
+			</table>
+			</form>
+    </main><!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="@{/js/jquery-slim.min.js}"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"  th:src="@{/js/popper.min.js}"></script>
+    <script src="../../dist/js/bootstrap.min.js"  th:src="@{/js/bootstrap.min.js}"></script>
+  </body>
+</html>

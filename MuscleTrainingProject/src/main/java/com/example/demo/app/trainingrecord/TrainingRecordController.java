@@ -107,7 +107,7 @@ public class TrainingRecordController {
 
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
-		return "/trainingrecord";
+		return "/trainingrecord_boot";
 	}
 
 	/**
@@ -142,14 +142,14 @@ public class TrainingRecordController {
 			model.addAttribute("message", TODAY_REGISTERED);
 			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
-			return "/trainingrecord";
+			return "/trainingrecord_boot";
 		
 		//その他DB追加時のエラー時の処理	
 		} catch (Exception e) {
 			model.addAttribute("message",  e.getMessage());
 			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
-			return "/trainingrecord";
+			return "/trainingrecord_boot";
 		}
 		
 		model.addAttribute("loginUser", userFullName);
@@ -157,7 +157,7 @@ public class TrainingRecordController {
 		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
-		return "/trainingrecord";
+		return "/trainingrecord_boot";
 	}
 	
 	/**
@@ -192,7 +192,7 @@ public class TrainingRecordController {
 			model.addAttribute("message",  e.getMessage());
 			model.addAttribute("title", View.VIEW_TRAININGRECORD);
 			model.addAttribute("trainingRecordForm", trainingRecordForm);
-			return "/trainingrecord";
+			return "/trainingrecord_boot";
 		}
 		
 		model.addAttribute("loginUser", userFullName);
@@ -200,7 +200,7 @@ public class TrainingRecordController {
 		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
-		return "/trainingrecord";
+		return "/trainingrecord_boot";
 	}
 	
 	/**
@@ -234,6 +234,6 @@ public class TrainingRecordController {
 		model.addAttribute("title", View.VIEW_TRAININGRECORD);
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
 		
-		return "/trainingrecord";
+		return "/trainingrecord_boot";
 	}
 }

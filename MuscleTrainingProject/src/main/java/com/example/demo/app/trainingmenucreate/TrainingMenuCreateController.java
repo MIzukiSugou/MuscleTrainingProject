@@ -162,12 +162,12 @@ public class TrainingMenuCreateController {
 	
 	/**
 	 * 戻るボタン押下時の処理
-	 * @return　ログイン画面
+	 * @return　トレーニング記録画面
 	 */
 	@RequestMapping(value = "/execution", params = "back", method = RequestMethod.POST)
 	public String createBack() {
 
-		return "forward:/menu/access";
+		return "forward:/calendarrecord/access";
 	}
 	
 	/**

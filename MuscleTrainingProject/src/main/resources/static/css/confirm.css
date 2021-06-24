@@ -20,6 +20,12 @@ body {
 input.input-error {
     border: 1px solid #c00;
 }
+
+.link-color{
+    color: #d63384;
+    word-wrap: break-word;
+}
+
 .form-signin {
   width: 100%;
   max-width: 330px;
