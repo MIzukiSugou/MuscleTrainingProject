@@ -45,9 +45,6 @@ public class TrainingRecord implements Serializable {
 	//TOTAL
 	private String total;
 	
-	//実施フラグ
-	private String implementationFlag;
-	
 	//作成日時
 	private String insertDate;
 	
@@ -180,12 +177,4 @@ public class TrainingRecord implements Serializable {
 		this.deleteFlag = deleteFlag;
 	}
 
-	public String getImplementationFlag() {
-		return implementationFlag;
-	}
-
-	public void setImplementationFlag(String implementationFlag) {
-		this.implementationFlag = implementationFlag;
-	}
-	
 }

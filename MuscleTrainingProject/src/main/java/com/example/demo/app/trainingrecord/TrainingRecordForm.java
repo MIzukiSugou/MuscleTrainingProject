@@ -14,6 +14,9 @@ public class TrainingRecordForm implements Serializable{
 
 	private static final long serialVersionUID = -6927939434355858350L;
 	
+	//ログインユーザーID
+	private String userId;
+	
 	// 「記録」ボタン制御フラグ
 	private int recordsFlg;
 	
@@ -25,9 +28,6 @@ public class TrainingRecordForm implements Serializable{
 	
 	//トレーニング記録　フォーム「子」クラス
 	private List<TrainingRecordListForm> trainingRecordList;
-	
-	//トレーニングメニューリスト
-	private Map<String, String> menuMap;
 	
 	//トレーニング実施チェックボックス制御
 	private Map<String, String> implementedCheck = initImplementedCheck();
@@ -50,15 +50,10 @@ public class TrainingRecordForm implements Serializable{
 	//年月日「プルダウン」
 	private Map<String, String> pulldownDate;
 	
+	//TrainingMenu
+	private String menu;
 	
-	public Map<String, String> getMenuMap() {
-		return menuMap;
-	}
-
-	public void setMenuMap(Map<String, String> menuMap) {
-		this.menuMap = menuMap;
-	}
-
+	
 	public String getYear() {
 		return year;
 	}
@@ -153,6 +148,22 @@ public class TrainingRecordForm implements Serializable{
 
 	public void setTrainingRecordList(List<TrainingRecordListForm> trainingRecordList) {
 		this.trainingRecordList = trainingRecordList;
+	}
+
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 }

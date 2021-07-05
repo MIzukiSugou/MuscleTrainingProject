@@ -1,5 +1,10 @@
 package com.example.demo.app.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Service;
@@ -45,5 +50,25 @@ public class CommonService {
 		
 		return loginUser;
    }
+   
+	/**
+	 * 日付情報を取得します。
+	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 */
+	public Map<String, String> setDate() {
+		
+		//現在日付をYYYY/MM/DDの形で取得
+		Calendar today = Calendar.getInstance();
+		SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyyMMdd");
+		String strToday = yyyymmdd.format(today.getTime());
+		
+		Map<String, String> days = new HashMap<>();
+		
+		days.put(CommonConst.YEAR, strToday.substring(0, 4));
+		days.put(CommonConst.MONTH, strToday.substring(4, 6));
+		days.put(CommonConst.DAY, strToday.substring(6, 8));
+		
+		return days;
+	}
 
 }

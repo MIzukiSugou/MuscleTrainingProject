@@ -1,6 +1,7 @@
 package com.example.demo.app.trainingrecord;
 
 import java.io.Serializable;
+import java.util.Map;
 /**
  * トレーニング記録画面 フォーム「子」クラス
  * 
@@ -10,6 +11,9 @@ import java.io.Serializable;
 public class TrainingRecordListForm implements Serializable{
 
 	private static final long serialVersionUID = -6927939434355858350L;
+	
+	//トレーニングメニューリスト(プルダウン)
+	private Map<String, String> menuMap;
 	
 	//TrainingMenu
 	private String menu;
@@ -38,10 +42,6 @@ public class TrainingRecordListForm implements Serializable{
 	//Total
 	private int total;
 	
-	//実施フラグ
-	private String implementationFlag;
-	
-
 	public String getMenu() {
 		return menu;
 	}
@@ -114,15 +114,12 @@ public class TrainingRecordListForm implements Serializable{
 		this.total = total;
 	}
 
-	public String getImplementationFlag() {
-		if (this.implementationFlag == null){
-			this.implementationFlag = "0";
-		}
-		return implementationFlag;
+	public Map<String, String> getMenuMap() {
+		return menuMap;
 	}
 
-	public void setImplementationFlag(String implementationFlag) {
-		this.implementationFlag = implementationFlag;
+	public void setMenuMap(Map<String, String> menuMap) {
+		this.menuMap = menuMap;
 	}
 
 }

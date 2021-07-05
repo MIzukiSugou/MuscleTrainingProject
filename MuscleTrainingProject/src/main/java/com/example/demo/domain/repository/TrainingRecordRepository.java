@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.entity.TrainingRecord;
 
@@ -15,6 +16,7 @@ import com.example.demo.domain.entity.TrainingRecord;
  * @author 菅生　2021/2/21
  *
  */
+@Transactional
 @Repository
 public class TrainingRecordRepository {
 
@@ -143,7 +145,6 @@ public class TrainingRecordRepository {
 					+ "    , SET5"
 					+ "    , SET6"
 					+ "    , TOTAL"
-					+ "    , IMPLEMENTATION_FLAG"
 					+ "    , INSERT_DATE"
 					+ "    , INSERT_USER"
 					+ "    , UPDATE_DATE"
@@ -152,7 +153,6 @@ public class TrainingRecordRepository {
 					+ ") "
 					+ "VALUES ( "
 					+ "    ? "
-					+ "    , ? "
 					+ "    , ? "
 					+ "    , ? "
 					+ "    , ? "
@@ -173,7 +173,7 @@ public class TrainingRecordRepository {
 			count = jdbcTempate.update(sql,trainingRecord.getUserId(),trainingRecord.getDateRecord(),trainingRecord.getTrainingMenu(),
 					trainingRecord.getWeight(),trainingRecord.getSt1(),trainingRecord.getSt2(),
 					trainingRecord.getSt3(),trainingRecord.getSt4(),trainingRecord.getSt5(),trainingRecord.getSt6(),trainingRecord.getTotal(),
-					trainingRecord.getImplementationFlag(),trainingRecord.getInsertUser(),trainingRecord.getUpdateUser(),trainingRecord.getDeleteFlag());
+					trainingRecord.getInsertUser(),trainingRecord.getUpdateUser(),trainingRecord.getDeleteFlag());
 		}
 		
 		return count;
@@ -196,7 +196,6 @@ public class TrainingRecordRepository {
 				+ "    , SET5"
 				+ "    , SET6"
 				+ "    , TOTAL "
-				+ "    , Implementation_FLAG "
 				+ "from"
 				+ "    TRAINING_RECORD "
 				+ "WHERE"
@@ -215,7 +214,6 @@ public class TrainingRecordRepository {
 			trainingRecord.setSt5((String)result.get("SET5"));
 			trainingRecord.setSt6((String)result.get("SET6"));
 			trainingRecord.setTotal((String)result.get("TOTAL"));
-			trainingRecord.setImplementationFlag(((String)result.get("Implementation_FLAG")));
 			
 			trainingRecordList.add(trainingRecord);
 		}
@@ -243,7 +241,6 @@ public class TrainingRecordRepository {
 					+ "    , SET5 = ? "
 					+ "    , SET6 = ? "
 					+ "    , TOTAL = ? "
-					+ "    , IMPLEMENTATION_FLAG = ? "
 					+ "    , UPDATE_DATE = NOW() "
 					+ "    , UPDATE_USER = ? "
 					+ "WHERE"
@@ -253,7 +250,7 @@ public class TrainingRecordRepository {
 			
 			count =  jdbcTempate.update(sql,trainingRecord.getWeight(),trainingRecord.getSt1(),trainingRecord.getSt2(),
 					trainingRecord.getSt3(),trainingRecord.getSt4(),trainingRecord.getSt5(),trainingRecord.getSt6(),trainingRecord.getTotal(),
-					trainingRecord.getImplementationFlag(),trainingRecord.getUpdateUser(),trainingRecord.getUserId(),trainingRecord.getDateRecord(),trainingRecord.getTrainingMenu());
+					trainingRecord.getUpdateUser(),trainingRecord.getUserId(),trainingRecord.getDateRecord(),trainingRecord.getTrainingMenu());
 			
 		}
 		

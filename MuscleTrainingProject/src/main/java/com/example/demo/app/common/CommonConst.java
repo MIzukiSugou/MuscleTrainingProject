@@ -25,5 +25,22 @@ public class CommonConst {
 	
     /** セッションタイムアウト時のリクエストパラメータ文字列 */
     public static final String TIME_OUT_REQUEST_PARAMETER = "?logoutParam=session_time_out";
-
+    
+	/** 追加時フラグ */
+    public static final int ADD = 999999999;
+    
+	/** 初期フラグ */
+    public static final int INITIAL = 888888888;
+    
+	/** 初期フラグ */
+    public static final int ERROR = 777777777;
+    
+	/** 年 */
+    public static final String YEAR = "year";
+    
+	/** 月 */
+    public static final String MONTH = "month";
+    
+	/** 日 */
+    public static final String DAY = "day";
 }
