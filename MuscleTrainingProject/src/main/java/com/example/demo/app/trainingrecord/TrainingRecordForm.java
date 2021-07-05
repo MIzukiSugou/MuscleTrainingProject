@@ -17,23 +17,8 @@ public class TrainingRecordForm implements Serializable{
 	//ログインユーザーID
 	private String userId;
 	
-	// 「記録」ボタン制御フラグ
-	private int recordsFlg;
-	
-	// 「更新」ボタン制御フラグ
-	private int updateFlg;
-	
-	// 「追加」ボタン制御フラグ
-	private int addFlg;
-	
 	//トレーニング記録　フォーム「子」クラス
 	private List<TrainingRecordListForm> trainingRecordList;
-	
-	//トレーニング実施チェックボックス制御
-	private Map<String, String> implementedCheck = initImplementedCheck();
-	
-	//トレーニング実施制御
-	private String implemented;
 	
 	//年
 	private String year;
@@ -46,9 +31,6 @@ public class TrainingRecordForm implements Serializable{
 	
 	//年月日
 	private String date;
-	
-	//年月日「プルダウン」
-	private Map<String, String> pulldownDate;
 	
 	//TrainingMenu
 	private String menu;
@@ -78,14 +60,6 @@ public class TrainingRecordForm implements Serializable{
 		this.day = day;
 	}
 	
-	public Map<String, String> getPulldownDate() {
-		return pulldownDate;
-	}
-
-	public void setPulldownDate(Map<String, String> pulldownDate) {
-		this.pulldownDate = pulldownDate;
-	}
-	
 	public String getDate() {
 		return date;
 	}
@@ -94,54 +68,6 @@ public class TrainingRecordForm implements Serializable{
 		this.date = date;
 	}
 	
-	public int getRecordsFlg() {
-		return recordsFlg;
-	}
-
-	public void setRecordsFlg(int recordsFlg) {
-		this.recordsFlg = recordsFlg;
-	}
-
-	public int getUpdateFlg() {
-		return updateFlg;
-	}
-
-	public void setUpdateFlg(int updateFlg) {	
-		this.updateFlg = updateFlg;
-	}
-
-	public int getAddFlg() {	
-		return addFlg;
-	}
-
-	public void setAddFlg(int addeFlg) {
-		this.addFlg = addeFlg;
-	}
-	
-    private Map<String, String> initImplementedCheck() {
-    	implementedCheck = new LinkedHashMap<>(); 
-		implementedCheck.put("001","実施");
-		implementedCheck.put("002","未実施");
-		setImplemented("001");
-		return implementedCheck;
-	}
-
-	public Map<String, String> getImplementedCheck() {
-		return implementedCheck;
-	}
-
-	public void setImplementedCheck(Map<String, String> implementedCheck) {
-		this.implementedCheck = implementedCheck;
-	}
-
-	public String getImplemented() {
-		return implemented;
-	}
-
-	public void setImplemented(String implemented) {
-		this.implemented = implemented;
-	}
-
 	public List<TrainingRecordListForm> getTrainingRecordList() {
 		return trainingRecordList;
 	}
