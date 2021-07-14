@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.entity.TrainingMenuCreate;
+import com.example.demo.domain.entity.TrainingMenuCreateDao;
 
 /**
  * トレーニングメニュー作成画面 リポジトリクラス
@@ -28,7 +28,7 @@ public class TrainingMenuCreateRepository {
 	 * @param trainingMenuCreate トレーニングメニュー情報リポジトリクラス
 	 * @return
 	 */
-	public int insertTrainingMenu(TrainingMenuCreate trainingMenuCreate) {
+	public int insertTrainingMenu(TrainingMenuCreateDao trainingMenuCreate) {
 		
 		String sql = "INSERT "
 				+ "INTO TRAINING_MENU_MANAGEMENT( "

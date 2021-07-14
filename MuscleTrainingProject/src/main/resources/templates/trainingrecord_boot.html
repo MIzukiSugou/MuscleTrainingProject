@@ -46,85 +46,131 @@
   <body>
 	<div th:replace="~{block/header::headerA}"></div>
     <main class="container">
+    <!--
     	<div class="starter-template text-center py-5 px-3">
         	<h1 th:text="${title}"></h1>
         	<img class="mb-4" src="/docs/5.0/assets/brand/bootstrap-logo.svg" th:src="@{/image/icon/trainhard.jpg}" alt="" width="250" height="230">
-      	</div>   
-			 <form method="post" th:action="@{/calendarrecord/confirm}" th:object="${trainingRecordForm}">
-				<!-- 当日日付 -->		    	
-				<div align="left">
-					<label th:text="*{year}"></label>
-					<span> 年</span>    		
-					<label th:text="*{month}"></label>    		
-					<span> 月</span>    		
-					<label th:text="*{day}"></label>    		
-					<span> 日</span>    		
-				</div>	    	
-				<div th:text="${message}"></div>	    
-					<div align="right">	    
-						<!-- 記録ボタン：活性 -->
-						<th:block th:if="*{#lists.size(trainingRecordList)} > 1" >	    
-							<input class="btn btn-secondary" type="submit" name="records" value="記録" />    
-						</th:block>
-						
-					</div>
-			      
-			<table class="table table-striped">
-				<thead>
-					<tr class="center">
-						<th>TrainingMenu</th>
-						<th>Weight</th>
-						<th>St1</th>
-						<th>St2</th>	
-						<th>St3</th>
-						<th>St4</th>
-						<th>St5</th>
-						<th>St6</th>
-						<th>Total</th>
-						<th><th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- サーバで設定されたデータを表示 -->
-					<tr th:each="trainingRecordListForm,stat : *{trainingRecordList}">   
-					
-					<!-- listの最終行のみ表示 -->
-					<th:block th:if="*{#lists.size(trainingRecordList)-1} == ${stat.index}" >
-						<td class="center">
-							<select id="menu" name="menu">
-								<option th:each="menu: *{trainingRecordList[__${stat.index}__].menuMap}" th:value="${menu.value}" th:inline="text">[[${menu.value}]]</option>
-							</select>
-							<button id="menuInputButton" type="submit" class="btn btn-secondary" name="add" >追加</button>
-						</td>
-							
-					</th:block>
-					
-					<!-- listの最終行以外表示 -->	
-					<th:block th:if="*{#lists.size(trainingRecordList)-1} != ${stat.index}" >
-						<td class="center"  th:text="*{trainingRecordList[__${stat.index}__].menu}"></td>
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].weight}" />kg</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st1}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st2}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st3}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st4}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st5}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].st6}" />reps</td>		        
-						<td class="center"><input size="2" type="text" th:field="*{trainingRecordList[__${stat.index}__].total}" />reps</td>		        
-						<td class="center">
-							<button type="submit" class="btn btn-secondary" name="delete" th:value="${stat.index}">削除</button>
-						</td>						
-										
-					</th:block>
-					
+      	</div>
+    -->  
+		<form method="post" th:action="@{/calendarrecord/confirm}" th:object="${trainingRecordForm}">
 			
-					<!-- 以下はpost送信用 -->		        
-					<td style='display	:none;'>		       
-						<input type="hidden" th:field="*{trainingRecordList[__${stat.index}__].menu}" />		          
-					</td>		        
-					</tr>
-				</tbody>
-			</table>
-			</form>
+			<!-- 日付 -->	    	
+			<div align="left">
+				<input id="calendar" type="date" name="calendar" max="9999-12-31" th:field="*{dateView}">
+				<input id="settingBtn" class="btn btn-secondary" type="submit" name="setting" value="設定" />
+			</div>
+			
+			<div th:text="${message}"></div>	    
+			 <div style="border: ridge; height: 300px; width: 1320px">
+				  <table class="table table-striped">
+				    <thead style="display: block;">
+				      <tr class="center">
+				      	<th style="width: 374.43px;">TrainingMenu</th>
+						<th style="width: 93.14px;">Weight</th>
+						<th style="width: 107.27px;">St1</th>
+						<th style="width: 107.27px;">St2</th>	
+						<th style="width: 107.27px;">St3</th>
+						<th style="width: 107.27px;">St4</th>
+						<th style="width: 107.27px;">St5</th>
+						<th style="width: 107.27px;">St6</th>
+						<th style="width: 107.27px;">Total</th>
+						<th style="width: 67.47px;">
+							<input id="recordBtn" class="btn btn-secondary" type="submit" name="records" value="記録" />    
+						</th>
+				      </tr>
+				    </thead>
+				    <tbody style="display: block; height: 250px; overflow-y: scroll">
+						<!-- サーバで設定されたデータを表示 -->
+						<tr th:each="trainingRecordListForm,stat : *{trainingRecordListAdd}">   
+						
+							<!-- listの最終行のみ表示 -->
+							<th:block th:if="*{#lists.size(trainingRecordListAdd)-1} == ${stat.index}" >
+								<td style="width: 374.43px;" class="center">
+									<select id="menu" name="menuKey">
+										<option th:each="menu: *{trainingRecordListAdd[__${stat.index}__].menuMap}" th:value="${menu.key}" th:inline="text">[[${menu.value}]]</option>
+									</select>
+									<button id="menuInputButton" type="submit" class="btn btn-secondary" name="add">追加</button>
+								</td>
+							</th:block>
+							
+							<!-- listの最終行以外表示 -->	
+							<th:block th:if="*{#lists.size(trainingRecordListAdd)-1} != ${stat.index}" >
+								<td style="width: 374.43px;" class="center" th:text="*{trainingRecordListAdd[__${stat.index}__].menu}"></td>
+								<td style="width: 93.14px;" class="center"><input size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].weight}" />kg</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st1_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st1}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st2_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st2}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st3_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st3}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st4_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st4}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st5_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st5}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_st6_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].st6}" />reps</td>		        
+								<td style="width: 107.27px;" class="center"><input th:id="add_total_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListAdd[__${stat.index}__].total}" />reps</td>
+								<td style="width: 67.47px;" class="center">
+									<button type="submit" class="btn btn-secondary" name="deleteAdd" th:value="${stat.index}">削除</button>
+								</td>						
+							</th:block>
+					
+							<!-- 以下はpost送信用 -->		        
+							<td style='display	:none;'>		       
+								<input type="hidden" th:field="*{trainingRecordListAdd[__${stat.index}__].menu}" />	
+								<input type="hidden" th:field="*{trainingRecordListAdd[__${stat.index}__].menuKey}" />
+								<input type="hidden" th:id="add_deleteFlg_+${stat.index}" th:field="*{trainingRecordListAdd[__${stat.index}__].deleteFlg}">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<!-- 以下はpost送信用 -->	
+			<!-- 記録ボタン：制御 -->
+			<input type="hidden" id="recordBtnControl" th:field="*{recordBtnControl}" />
+			<!-- リストサイズ：制御 -->
+			<input type="hidden" id="trainingRecordListAddSize" th:field="*{trainingRecordFormAddListEndIndex}" />
+			<!-- リストサイズ：制御 -->
+			<input type="hidden" id="trainingRecordListEditingSize" th:field="*{trainingRecordFormEditingListEndIndex}" />
+			<!-- 日付 -->
+			<input type="hidden" th:field="*{date}" />
+	
+			
+			<!-- 記録済みトレーニング情報表示 -->
+			<div style="border: ridge; height: 300px; width: 1320px">
+				  <table class="table table-striped">
+				    <thead style="display: block;">
+				      <tr class="center">
+				      	<th style="width: 374.43px;"></th>
+						<th style="width: 93.14px;"></th>
+						<th style="width: 107.27px;"></th>
+						<th style="width: 107.27px;"></th>	
+						<th style="width: 107.27px;"></th>
+						<th style="width: 107.27px;"></th>
+						<th style="width: 107.27px;"></th>
+						<th style="width: 107.27px;"></th>
+						<th style="width: 107.27px;"></th>
+						<th style="width: 67.47px;"><input id="recordBtn" class="btn btn-secondary" type="submit" name="update" value="更新" /> </th>
+				      </tr>
+				    </thead>
+				    <tbody style="display: block; height: 250px; overflow-y: scroll">
+				      <tr th:each="trainingRecordListForm,stat : *{trainingRecordListEditing}">   
+							<td style="width: 374.43px;" class="center" th:text="*{trainingRecordListEditing[__${stat.index}__].menu}"></td>
+							<td style="width: 93.14px;"class="center"><input th:id="weight_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].weight}" />kg</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st1_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st1}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st2_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st2}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st3_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st3}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st4_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st4}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st5_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st5}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_st6_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].st6}" />reps</td>		        
+							<td style="width: 107.27px;" class="center"><input th:id="editing_total_+${stat.index}" size="2" type="text" th:field="*{trainingRecordListEditing[__${stat.index}__].total}" />reps</td>
+							<td style="width: 67.47px;" class="center"><input th:id="editing_deleteFlg_+${stat.index}" type="checkbox" th:field="*{trainingRecordListEditing[__${stat.index}__].deleteFlg}" 
+								th:value="1" th:checked="*{trainingRecordListEditing[__${stat.index}__].deleteFlg == '1'}">削除
+							</td>					     		
+				     		<!-- 以下はpost送信用 -->	
+				     		<td style='display	:none;'>		       
+								<input type="hidden" th:field="*{trainingRecordListEditing[__${stat.index}__].menu}" />	
+							</td>
+				      </tr>
+				    </tbody>
+				  </table>
+		    </div> 
+		</form>
     </main>
 
     <!-- Bootstrap core JavaScript

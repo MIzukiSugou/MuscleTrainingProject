@@ -6,7 +6,7 @@ package com.example.demo.domain.entity;
  * @author 菅生　2021/05/30
  *
  */
-public class TrainingMenuCreate {
+public class TrainingMenuCreateDao {
 	
 	//ユーザーId
 	private String userId;

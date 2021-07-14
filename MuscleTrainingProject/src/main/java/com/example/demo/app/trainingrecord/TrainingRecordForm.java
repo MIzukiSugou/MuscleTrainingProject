@@ -1,9 +1,7 @@
 package com.example.demo.app.trainingrecord;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 /**
  * トレーニング記録画面 フォーム「親」クラス
  * 
@@ -17,48 +15,35 @@ public class TrainingRecordForm implements Serializable{
 	//ログインユーザーID
 	private String userId;
 	
-	//トレーニング記録　フォーム「子」クラス
-	private List<TrainingRecordListForm> trainingRecordList;
+	//DB削除予定のトレーニングメニュー一覧
+	private List<String> deleteMenusEditing;
 	
-	//年
-	private String year;
+	//トレーニング記録　フォーム「子」クラス(追加用)
+	private List<TrainingRecordListForm> trainingRecordListAdd;
 	
-	//月
-	private String month;
+	//トレーニング記録　フォーム「子」クラス(編集用)
+	private List<TrainingRecordListForm> trainingRecordListEditing;
 	
-	//日
-	private String day;
+	//年月日(yyyy-MM-dd)
+	private String dateView;
 	
-	//年月日
+	//年月日(yyyymmdd)
 	private String date;
 	
-	//TrainingMenu
+	//TrainingMenu:value
 	private String menu;
 	
+	//TrainingMenu:key
+	private String menuKey;
 	
-	public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}
-
-	public String getMonth() {
-		return month;
-	}
-
-	public void setMonth(String month) {
-		this.month = month;
-	}
-
-	public String getDay() {
-		return day;
-	}
-
-	public void setDay(String day) {
-		this.day = day;
-	}
+	//記録ボタン制御
+	private String recordBtnControl;
+	
+	//trainingRecordListAdd表示最終位置(index)
+	private int trainingRecordFormAddListEndIndex;
+	
+	//trainingRecordListEditing表示最終位置(index)
+	private int trainingRecordFormEditingListEndIndex;
 	
 	public String getDate() {
 		return date;
@@ -68,13 +53,6 @@ public class TrainingRecordForm implements Serializable{
 		this.date = date;
 	}
 	
-	public List<TrainingRecordListForm> getTrainingRecordList() {
-		return trainingRecordList;
-	}
-
-	public void setTrainingRecordList(List<TrainingRecordListForm> trainingRecordList) {
-		this.trainingRecordList = trainingRecordList;
-	}
 
 	public String getMenu() {
 		return menu;
@@ -91,5 +69,70 @@ public class TrainingRecordForm implements Serializable{
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public String getMenuKey() {
+		return menuKey;
+	}
+
+	public void setMenuKey(String menuKey) {
+		this.menuKey = menuKey;
+	}
+
+	public String getRecordBtnControl() {
+		return recordBtnControl;
+	}
+
+	public void setRecordBtnControl(String recordBtnControl) {
+		this.recordBtnControl = recordBtnControl;
+	}
+
+	public List<TrainingRecordListForm> getTrainingRecordListAdd() {
+		return trainingRecordListAdd;
+	}
+
+	public void setTrainingRecordListAdd(List<TrainingRecordListForm> trainingRecordListAdd) {
+		this.trainingRecordListAdd = trainingRecordListAdd;
+	}
+
+	public List<TrainingRecordListForm> getTrainingRecordListEditing() {
+		return trainingRecordListEditing;
+	}
+
+	public void setTrainingRecordListEditing(List<TrainingRecordListForm> trainingRecordListEditing) {
+		this.trainingRecordListEditing = trainingRecordListEditing;
+	}
+
+	public String getDateView() {
+		return dateView;
+	}
+
+	public void setDateView(String dateView) {
+		this.dateView = dateView;
+	}
+
+	public List<String> getDeleteMenusEditing() {
+		return deleteMenusEditing;
+	}
+
+	public void setDeleteMenusEditing(List<String> deleteMenusEditing) {
+		this.deleteMenusEditing = deleteMenusEditing;
+	}
+
+	public int getTrainingRecordFormAddListEndIndex() {
+		return trainingRecordFormAddListEndIndex;
+	}
+
+	public void setTrainingRecordFormAddListEndIndex(int trainingRecordFormAddListEndIndex) {
+		this.trainingRecordFormAddListEndIndex = trainingRecordFormAddListEndIndex;
+	}
+
+	public int getTrainingRecordFormEditingListEndIndex() {
+		return trainingRecordFormEditingListEndIndex;
+	}
+
+	public void setTrainingRecordFormEditingListEndIndex(int trainingRecordFormEditingListEndIndex) {
+		this.trainingRecordFormEditingListEndIndex = trainingRecordFormEditingListEndIndex;
+	}
+
 
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.entity.Create;
+import com.example.demo.domain.entity.CreateDao;
 
 /**
  * アカウント作成画面のリポジトリクラスです。
@@ -28,7 +28,7 @@ public class CreateRepository {
 	 * @param create
 	 * @return
 	 */
-	public int insertUser(Create create) {
+	public int insertUser(CreateDao create) {
 		
 		String sql = "INSERT "
 				+ "INTO USER_MANAGEMENT( "

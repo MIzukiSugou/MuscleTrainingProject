@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author 菅生　2021/2/18
  *
  */
-public class Login implements Serializable {
+public class LoginDao implements Serializable {
 	
 	private static final long serialVersionUID = -1465116841237835004L;
 

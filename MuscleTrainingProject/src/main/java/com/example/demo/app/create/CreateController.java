@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.app.common.View;
-import com.example.demo.domain.entity.Create;
+import com.example.demo.domain.entity.CreateDao;
 import com.example.demo.domain.service.CreateService;
 
 /**
@@ -119,7 +119,7 @@ public class CreateController {
 			Model model,
 			RedirectAttributes redirectAttridutes,
 			HttpSession session,
-			Create create) {
+			CreateDao create) {
 		
 		// 入力値エラーチェック
 		if (result.hasErrors()) {

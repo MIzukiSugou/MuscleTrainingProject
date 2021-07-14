@@ -15,8 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.common.CommonService;
 import com.example.demo.app.common.View;
-import com.example.demo.domain.entity.Login;
-import com.example.demo.domain.entity.TrainingMenuCreate;
+import com.example.demo.domain.entity.LoginDao;
+import com.example.demo.domain.entity.TrainingMenuCreateDao;
 import com.example.demo.domain.service.TrainingMenuCreateService;
 
 /**
@@ -58,7 +58,7 @@ public class TrainingMenuCreateController {
         }
 		
 		// ユーザ情報をセッションから取得
-        Login loginUser = commonService.getUserFullName(session);
+        LoginDao loginUser = commonService.getUserFullName(session);
         //ユーザーフルネーム取得
         String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
@@ -91,7 +91,7 @@ public class TrainingMenuCreateController {
         }
 		
 		// ユーザ情報をセッションから取得
-        Login loginUser = commonService.getUserFullName(session);
+        LoginDao loginUser = commonService.getUserFullName(session);
         //ユーザーフルネーム取得
         String userFullName = loginUser.getFirstName() + loginUser.getLastName();
 		
@@ -124,7 +124,7 @@ public class TrainingMenuCreateController {
 			Model model,
 			RedirectAttributes redirectAttridutes,
 			HttpSession session,
-			TrainingMenuCreate trainingMenuCreate) {
+			TrainingMenuCreateDao trainingMenuCreate) {
 		
 		// 入力値エラーチェック
 		if (result.hasErrors()) {
@@ -132,7 +132,7 @@ public class TrainingMenuCreateController {
 		}
 		
 		// ユーザ情報をセッションから取得
-        Login loginUser = commonService.getUserFullName(session);
+        LoginDao loginUser = commonService.getUserFullName(session);
         //ユーザーフルネーム取得
         String userFullName = loginUser.getFirstName() + loginUser.getLastName();
         //ユーザーID取得

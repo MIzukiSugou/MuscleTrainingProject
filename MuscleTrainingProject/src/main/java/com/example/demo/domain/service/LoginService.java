@@ -9,7 +9,7 @@ import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.create.CreateErrorStatement;
 import com.example.demo.app.login.LoginErrorStatement;
 import com.example.demo.app.login.LoginForm;
-import com.example.demo.domain.entity.Login;
+import com.example.demo.domain.entity.LoginDao;
 import com.example.demo.domain.repository.LoginRepository;
 
 /**
@@ -70,7 +70,7 @@ public class LoginService {
         String userId = form.getUserId();
         
         // ユーザ情報の取得
-        Login loginUser = repository.selectUser(userId);
+        LoginDao loginUser = repository.selectUser(userId);
         
         if (loginUser == null) {
             // ユーザ情報が存在しない場合

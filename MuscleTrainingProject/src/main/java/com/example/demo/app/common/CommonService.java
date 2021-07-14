@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.entity.Login;
+import com.example.demo.domain.entity.LoginDao;
 
 /**
  * 共通処理のServiceクラスです。
@@ -43,32 +43,46 @@ public class CommonService {
    * @param session セッション情報
    * @return loginUser ログインユーザー情報
     */
-   public Login getUserFullName(HttpSession session) {
+   public LoginDao getUserFullName(HttpSession session) {
 	   
 		// ユーザ情報をセッションから取得
-		Login loginUser = (Login) session.getAttribute(CommonConst.LOGIN_USER);
+		LoginDao loginUser = (LoginDao) session.getAttribute(CommonConst.LOGIN_USER);
 		
 		return loginUser;
    }
    
+//	/**
+//	 * 日付情報を取得します。
+//	 * @param trainingRecordForm トレーニング記録画面フォーム
+//	 */
+//	public Map<String, String> setDate() {
+//		
+//		//現在日付をYYYY/MM/DDの形で取得
+//		Calendar today = Calendar.getInstance();
+//		SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyyMMdd");
+//		String strToday = yyyymmdd.format(today.getTime());
+//		
+//		Map<String, String> days = new HashMap<>();
+//		
+//		days.put(CommonConst.YEAR, strToday.substring(0, 4));
+//		days.put(CommonConst.MONTH, strToday.substring(4, 6));
+//		days.put(CommonConst.DAY, strToday.substring(6, 8));
+//		
+//		return days;
+//	}
+	
 	/**
 	 * 日付情報を取得します。
 	 * @param trainingRecordForm トレーニング記録画面フォーム
 	 */
-	public Map<String, String> setDate() {
+	public String setDate() {
 		
 		//現在日付をYYYY/MM/DDの形で取得
 		Calendar today = Calendar.getInstance();
-		SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyyMMdd");
-		String strToday = yyyymmdd.format(today.getTime());
+		SimpleDateFormat yyyymmdd = new SimpleDateFormat("yyyy-MM-dd");
+		String Today = yyyymmdd.format(today.getTime());
 		
-		Map<String, String> days = new HashMap<>();
-		
-		days.put(CommonConst.YEAR, strToday.substring(0, 4));
-		days.put(CommonConst.MONTH, strToday.substring(4, 6));
-		days.put(CommonConst.DAY, strToday.substring(6, 8));
-		
-		return days;
+		return Today;
 	}
 
 }

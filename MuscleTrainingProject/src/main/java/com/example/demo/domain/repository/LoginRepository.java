@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.entity.Login;
+import com.example.demo.domain.entity.LoginDao;
 
 /**
  * ログイン画面　リポジトリクラス
@@ -53,7 +53,7 @@ public class LoginRepository {
 	 * @param userId ユーザID
 	 * @return ユーザ情報
 	 */
-	public Login selectUser(String userId) {
+	public LoginDao selectUser(String userId) {
 
 		String sql = "SELECT"
 				+ "    USER_ID"
@@ -68,7 +68,7 @@ public class LoginRepository {
 
 		Map<String, Object> result = jdbcTempate.queryForMap(sql, new Object[] { userId });
 
-		Login login = new Login();
+		LoginDao login = new LoginDao();
 
 		login.setUserId((String) result.get("USER_ID"));
 		login.setFirstName((String) result.get("FIRST_NAME"));

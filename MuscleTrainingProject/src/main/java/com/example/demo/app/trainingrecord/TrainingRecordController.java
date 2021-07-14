@@ -3,19 +3,15 @@ package com.example.demo.app.trainingrecord;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.app.common.CommonConst;
 import com.example.demo.app.common.CommonService;
-import com.example.demo.app.common.View;
-import com.example.demo.domain.entity.Login;
 import com.example.demo.domain.service.TrainingRecordService;
 
 /**
@@ -77,32 +73,76 @@ public class TrainingRecordController {
         trainingRecordService.common(trainingRecordForm, session, model);
         
 		// ログインユーザーID登録トレーニングメニューの存在チェック
-		if (!(trainingRecordService.selectMenu(trainingRecordForm,session))) {
+		if (!(trainingRecordService.selectMenuCheck(trainingRecordForm))) {
 			
-			//ログインユーザーID登録トレーニングメニュー取得
-			trainingRecordService.selectMenu(trainingRecordForm,session);
-			
-			//ボタン押下時の共通処理：(追加)
-			trainingRecordService.buttonTrainingRecordFormList(trainingRecordForm,session,CommonConst.INITIAL);
+			//ボタン押下時の共通処理：(初期)
+			trainingRecordService.buttonTrainingRecordFormListAdd(trainingRecordForm, CommonConst.INITIAL,CommonConst.OTHER_INDEX);
 			
 		} else {
 			// ログインユーザーID登録トレーニングメニュー無し
 			//TODO 後日実装予定
 		}
 		
-		// ログインユーザーIDトレーニング記録存在チェック
-//		if (!(trainingRecordService.selectTrainingRecordDate(trainingRecordForm,session))) {
-//			// ログインユーザーIDトレーニング記録有り
-//			trainingRecordService.selectTrainingRecordDate(trainingRecordForm,session);
-//			
-//		} else {
-//			// ログインユーザーIDトレーニング記録無し
-//			//TODO　後日実装予定
-//
-//		}
+		//ログインユーザーIDトレーニング記録存在チェック
+		if (!(trainingRecordService.selectTrainingRecordCheck(trainingRecordForm))) {
+			// ログインユーザーIDトレーニング記録有り
+			trainingRecordService.selectTrainingRecord(trainingRecordForm);
+			
+		} else {
+			// ログインユーザーIDトレーニング記録無し
+			//TODO　後日実装予定
+
+		}
 		
 
 		model.addAttribute("trainingRecordForm", trainingRecordForm);
+		
+		return "/trainingrecord_boot";
+	}
+	
+	/**
+	 * 設定ボタン押下時の処理
+	 * 
+	 * @param model モデル情報
+	 * @param session セッション情報
+	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @return トレーニング記録画面
+	 */
+	@RequestMapping(value = "/confirm", params = "setting", method = RequestMethod.POST)
+	public String setting(Model model,
+			HttpSession session,
+			TrainingRecordForm trainingRecordForm
+			) {
+		
+        // セッションタイムアウトチェック
+        if (commonService.checkSessionTimeOut(session)) {
+            return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
+        }
+		
+        //共通処理実行
+        trainingRecordService.common(trainingRecordForm, session, model);
+        
+		// ログインユーザーID登録トレーニングメニューの存在チェック
+		if (!(trainingRecordService.selectMenuCheck(trainingRecordForm))) {
+			
+			//ボタン押下時の共通処理(追加項目)：(初期)
+			trainingRecordService.buttonTrainingRecordFormListAdd(trainingRecordForm, CommonConst.INITIAL,CommonConst.OTHER_INDEX);
+			
+		} else {
+			// ログインユーザーID登録トレーニングメニュー無し
+			//TODO 後日実装予定
+		}
+		
+		//ログインユーザーIDトレーニング記録存在チェック
+		if (!(trainingRecordService.selectTrainingRecordCheck(trainingRecordForm))) {
+			// ログインユーザーIDトレーニング記録有り
+			trainingRecordService.selectTrainingRecord(trainingRecordForm);
+			
+		} else {
+			// ログインユーザーIDトレーニング記録無し
+			trainingRecordService.initialization(trainingRecordForm, model);
+
+		}
 		
 		return "/trainingrecord_boot";
 	}
@@ -129,23 +169,23 @@ public class TrainingRecordController {
         //共通処理実行
         trainingRecordService.common(trainingRecordForm, session, model);
         
-        //ボタン押下時の共通処理：(追加)
-        trainingRecordService.buttonTrainingRecordFormList(trainingRecordForm, session, CommonConst.ADD);
+        //ボタン押下時の共通処理(追加項目)：(追加)
+        trainingRecordService.buttonTrainingRecordFormListAdd(trainingRecordForm, CommonConst.ADD, CommonConst.OTHER_INDEX);
 		
 		
 		return "/trainingrecord_boot";
 	}
 	
 	/**
-	 * 削除ボタン押下時の処理
+	 * 削除ボタン押下時（追加項目）の処理
 	 * 
 	 * @param model モデル情報
 	 * @param session セッション情報
 	 * @param trainingRecordForm トレーニング記録画面フォーム
 	 * @return トレーニング記録画面
 	 */
-	@RequestMapping(value = "/confirm", params = "delete", method = RequestMethod.POST)
-	public String delete(@RequestParam("delete") int trainingMenuIndex,
+	@RequestMapping(value = "/confirm", params = "deleteAdd", method = RequestMethod.POST)
+	public String deleteAdd(@RequestParam("deleteAdd") int trainingMenuIndex,
 			Model model,
 			HttpSession session,
 			TrainingRecordForm trainingRecordForm
@@ -159,13 +199,13 @@ public class TrainingRecordController {
         //共通処理実行
         trainingRecordService.common(trainingRecordForm, session, model);
 		
-        //ボタン押下時の共通処理：(削除)
-        trainingRecordService.buttonTrainingRecordFormList(trainingRecordForm, session, trainingMenuIndex);
+        //ボタン押下時の共通処理(追加項目)：(削除)
+        trainingRecordService.buttonTrainingRecordFormListAdd(trainingRecordForm, CommonConst.DALETE, trainingMenuIndex);
 		
 		
 		return "/trainingrecord_boot";
 	}
-
+	
 	/**
 	 * 記録ボタン押下時の処理
 	 * 
@@ -190,52 +230,36 @@ public class TrainingRecordController {
         trainingRecordService.common(trainingRecordForm, session, model);
         
          //トレーニング記録画面フォームリストの情報をDBに追加を行う
-        return trainingRecordService.insertTrainingRecord(trainingRecordForm,session,model);
+        return trainingRecordService.insertTrainingRecord(trainingRecordForm,model);
         
 	}
 	
-//	/**
-//	 * 更新ボタン押下時の処理
-//	 * 
-//	 * @param model モデル情報
-//	 * @param session セッション情報
-//	 * @param trainingRecordForm トレーニング記録画面フォーム
-//	 * @return トレーニング記録画面
-//	 */
-//	@RequestMapping(value = "/confirm", params = "update", method = RequestMethod.POST)
-//	public String update(Model model,
-//			HttpSession session,
-//			TrainingRecordForm trainingRecordForm
-//			) {
-//		
-//        // セッションタイムアウトチェック
-//        if (commonService.checkSessionTimeOut(session)) {
-//            return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
-//        }
-//		
-//		// ユーザ情報をセッションから取得
-//        Login loginUser = commonService.getUserFullName(session);
-//        String userFullName = loginUser.getFirstName() + loginUser.getLastName();
-//		
-//		try {
-//			//トレーニング記録画面フォームリストの情報をDBに更新を行う
-//			trainingRecordService.updateTrainingRecord(trainingRecordForm,session);
-//			
-//		//その他DB追加時のエラー時の処理	
-//		} catch (Exception e) {
-//			model.addAttribute("message",  e.getMessage());
-//			model.addAttribute("title", View.VIEW_TRAININGRECORD);
-//			model.addAttribute("trainingRecordForm", trainingRecordForm);
-//			return "/trainingrecord_boot";
-//		}
-//		
-//		model.addAttribute("loginUser", userFullName);
-//		model.addAttribute("message", RECORD_COMPLETION);
-//		model.addAttribute("title", View.VIEW_TRAININGRECORD);
-//		model.addAttribute("trainingRecordForm", trainingRecordForm);
-//		
-//		return "/trainingrecord_boot";
-//	}
+	/**
+	 * 更新ボタン押下時の処理
+	 * 
+	 * @param model モデル情報
+	 * @param session セッション情報
+	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @return トレーニング記録画面
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/confirm", params = "update", method = RequestMethod.POST)
+	public String update(Model model,
+			HttpSession session,
+			TrainingRecordForm trainingRecordForm
+			) throws Exception {
+		
+        // セッションタイムアウトチェック
+        if (commonService.checkSessionTimeOut(session)) {
+            return "redirect:/" + CommonConst.TIME_OUT_REQUEST_PARAMETER;
+        }
+        
+        //共通処理実行
+        trainingRecordService.common(trainingRecordForm, session, model);
+        
+        //トレーニング記録画面フォームリストの情報をDB更新を行う
+        return trainingRecordService.updateTrainingRecord(trainingRecordForm,model);
+	}
 //	
 //	/**
 //	 *確認ボタン押下時の処理

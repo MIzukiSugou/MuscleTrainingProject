@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.app.trainingmenucreate.TrainingMenuCreateForm;
-import com.example.demo.domain.entity.TrainingMenuCreate;
+import com.example.demo.domain.entity.TrainingMenuCreateDao;
 import com.example.demo.domain.repository.TrainingMenuCreateRepository;
 
 /**
@@ -40,7 +40,7 @@ public class TrainingMenuCreateService {
 	 * 
 	 * @param trainingMenuCreate トレーニングメニュー情報リポジトリクラス
      */
-	public void insertTrainingMenu(TrainingMenuCreate trainingMenuCreate,
+	public void insertTrainingMenu(TrainingMenuCreateDao trainingMenuCreate,
 			TrainingMenuCreateForm createForm) throws Exception {
 		
 		trainingMenuCreate.setUserId(createForm.getUserId());

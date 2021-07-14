@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.app.create.CreateForm;
-import com.example.demo.domain.entity.Create;
+import com.example.demo.domain.entity.CreateDao;
 import com.example.demo.domain.repository.CreateRepository;
 
 /**
@@ -50,7 +50,7 @@ public class CreateService{
     /**
      * アカウント情報の追加を行う。
      */
-	public void insertUser(Create create,
+	public void insertUser(CreateDao create,
 			CreateForm createForm) throws Exception {
 		
 		create.setUserId(createForm.getUserId());

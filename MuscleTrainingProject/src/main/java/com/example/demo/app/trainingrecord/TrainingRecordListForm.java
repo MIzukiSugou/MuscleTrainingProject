@@ -12,11 +12,17 @@ public class TrainingRecordListForm implements Serializable{
 
 	private static final long serialVersionUID = -6927939434355858350L;
 	
+	//更新時：削除フラグ
+	private String deleteFlg;
+	
 	//トレーニングメニューリスト(プルダウン)
 	private Map<String, String> menuMap;
 	
 	//TrainingMenu
 	private String menu;
+	
+	//TrainingMenu:key
+	private String menuKey;
 	
 	//Weight
 	private int weight;
@@ -120,6 +126,22 @@ public class TrainingRecordListForm implements Serializable{
 
 	public void setMenuMap(Map<String, String> menuMap) {
 		this.menuMap = menuMap;
+	}
+
+	public String getMenuKey() {
+		return menuKey;
+	}
+
+	public void setMenuKey(String menuKey) {
+		this.menuKey = menuKey;
+	}
+
+	public String getDeleteFlg() {
+		return deleteFlg;
+	}
+
+	public void setDeleteFlg(String deleteFlg) {
+		this.deleteFlg = deleteFlg;
 	}
 
 }

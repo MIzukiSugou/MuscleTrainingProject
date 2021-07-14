@@ -8,9 +8,12 @@ import java.io.Serializable;
  * @author 菅生　2021/4/10
  *
  */
-public class TrainingRecord implements Serializable {
+public class TrainingRecordDao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	//更新時：削除フラグ
+	private String deleteFlg;
 	
 	//ユーザーID
 	private String userId;
@@ -54,9 +57,6 @@ public class TrainingRecord implements Serializable {
 	//更新ユーザー
 	private String updateUser;
 	
-	//削除フラグ
-	private String deleteFlag;
-
 	public String getUserId() {
 		return userId;
 	}
@@ -169,12 +169,12 @@ public class TrainingRecord implements Serializable {
 		this.updateUser = updateUser;
 	}
 
-	public String getDeleteFlag() {
-		return deleteFlag;
+	public String getDeleteFlg() {
+		return deleteFlg;
 	}
 
-	public void setDeleteFlag(String deleteFlag) {
-		this.deleteFlag = deleteFlag;
+	public void setDeleteFlg(String deleteFlg) {
+		this.deleteFlg = deleteFlg;
 	}
 
 }

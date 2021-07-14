@@ -26,14 +26,21 @@ public class CommonConst {
     /** セッションタイムアウト時のリクエストパラメータ文字列 */
     public static final String TIME_OUT_REQUEST_PARAMETER = "?logoutParam=session_time_out";
     
+    /************************************************************************************************************/
 	/** 追加時フラグ */
-    public static final int ADD = 999999999;
+    public static final String ADD = "ADD";
     
 	/** 初期フラグ */
-    public static final int INITIAL = 888888888;
+    public static final String INITIAL = "INITIAL";
     
-	/** 初期フラグ */
-    public static final int ERROR = 777777777;
+	/** エラーフラグ */
+    public static final String ERROR = "ERROR";
+    
+	/** 追加フラグ */
+    public static final String DALETE = "DALETE";
+    
+	/** indexその他 */
+    public static final int OTHER_INDEX = 999999999;
     
 	/** 年 */
     public static final String YEAR = "year";
@@ -43,4 +50,21 @@ public class CommonConst {
     
 	/** 日 */
     public static final String DAY = "day";
+    
+	/** DB insert return 追加成功 */
+    public static final String INSERT_SUCCESS = "追加成功";
+    
+	/** DB insert return 追加失敗 */
+    public static final String INSERT_FAILURE = "追加失敗";
+    
+	/** DB insert return 追加重複失敗 */
+    public static final String INSERT_DUPLICATION_FAILURE = "追加重複失敗";
+    
+	/**更新時：エラーメッセージ*/
+    public static final String UPDATE_ERROR = "更新中にエラーが発生しました。";
+	
+	/**更新時：完了メッセージ*/
+    public static final String UPDATE_COMPLATE = "更新が完了しました。";
+    
+    /************************************************************************************************************/
 }

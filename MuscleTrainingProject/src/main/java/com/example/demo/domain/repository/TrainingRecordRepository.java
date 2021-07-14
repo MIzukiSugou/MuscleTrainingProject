@@ -5,21 +5,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import com.example.demo.domain.entity.TrainingRecord;
+import com.example.demo.app.common.CommonConst;
+import com.example.demo.domain.entity.TrainingRecordDao;
 
 /**
  * トレーニング記録画面　リポジトリクラス
  * @author 菅生　2021/2/21
  *
  */
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 @Repository
 public class TrainingRecordRepository {
-
+	
 	private final JdbcTemplate jdbcTempate;
 
 	@Autowired
@@ -33,16 +36,27 @@ public class TrainingRecordRepository {
 	 * @param userId   ユーザID
 	 * @return レコード数
 	 */
-	public int checkUserIdMenu(String userId) {
+	public int checkUserIdMenu(String userId, String dateRecord) {
 
-		String sql = "SELECT"
-				+ "    COUNT(*)"
+		String sql = "SELECT "
+				+ "    COUNT(*) "
 				+ "FROM"
 				+ "    TRAINING_MENU_MANAGEMENT "
 				+ "WHERE"
-				+ "    USER_ID = ?";
+				+ "    USER_ID = ? "
+				+ "    AND DELETE_FLAG = 0"
+				+ "    AND NOT TRAINING_MENU IN ( "
+				+ "        SELECT distinct"
+				+ "            TRAINING_MENU "
+				+ "        FROM"
+				+ "            TRAINING_RECORD "
+				+ "        WHERE"
+				+ "            TRAINING_RECORD.INSERT_DATE = ? "
+				+ "            AND USER_ID = ?"
+				+ "            AND DELETE_FLAG = 0"
+				+ "    )";
 
-		int count = jdbcTempate.queryForObject(sql, new Object[] { userId}, Integer.class);
+		int count = jdbcTempate.queryForObject(sql, new Object[] { userId, dateRecord, userId}, Integer.class);
 
 		return count;
 	}
@@ -53,16 +67,18 @@ public class TrainingRecordRepository {
 	 * @param userId   ユーザID
 	 * @return レコード数
 	 */
-	public int checkUserIdTrainingRecord(String userId) {
+	public int checkUserIdTrainingRecord(String userId, String dateRecord) {
 
 		String sql = "SELECT"
 				+ "    COUNT(*)"
 				+ "FROM"
 				+ "    TRAINING_RECORD "
 				+ "WHERE"
-				+ "    USER_ID = ?";
+				+ "    USER_ID = ?"
+				+ "    AND INSERT_DATE = ?"
+				+ "    AND DELETE_FLAG = 0";
 
-		int count = jdbcTempate.queryForObject(sql, new Object[] { userId}, Integer.class);
+		int count = jdbcTempate.queryForObject(sql, new Object[] { userId,dateRecord}, Integer.class);
 
 		return count;
 	}
@@ -99,17 +115,27 @@ public class TrainingRecordRepository {
 	 * @param userId ユーザID
 	 * @return トレーニングメニュー情報
 	 */
-	public List<String> selectMenu(String userId) {
+	public List<String> selectMenu(String userId, String dateRecord) {
 
-		String sql = "SELECT"
+		String sql = "SELECT "
 				+ "    TRAINING_MENU "
 				+ "FROM"
 				+ "    TRAINING_MENU_MANAGEMENT "
 				+ "WHERE"
-				+ "    USER_ID = ?"
-				+ "    AND DELETE_FLAG = 0";
+				+ "    USER_ID = ? "
+				+ "    AND DELETE_FLAG = 0"
+				+ "    AND NOT TRAINING_MENU IN ( "
+				+ "        SELECT distinct"
+				+ "            TRAINING_MENU "
+				+ "        FROM"
+				+ "            TRAINING_RECORD "
+				+ "        WHERE"
+				+ "            TRAINING_RECORD.INSERT_DATE = ? "
+				+ "            AND USER_ID = ?"
+				+ "            AND DELETE_FLAG = 0"
+				+ "    )";
 		
-		List<Map<String, Object>> resultList = jdbcTempate.queryForList(sql, new Object[] { userId });
+		List<Map<String, Object>> resultList = jdbcTempate.queryForList(sql, new Object[] { userId, dateRecord, userId });
 		
 		List<String> menuList = new ArrayList<>();
 		
@@ -123,60 +149,130 @@ public class TrainingRecordRepository {
 	/**
 	 * 実施するトレーニングを記録します。
 	 *
-	 * @param trainingRecordList トレーニング記録情報
-	 * @return DB結果
+	 * @param trainingRecordDaoList トレーニング記録情報
+	 * @return DB結果(重複の場合メニュー名)
 	 */
-	public int insertTrainingRecord(List<TrainingRecord> trainingRecordList) {
+	public String[] insertTrainingRecord(List<TrainingRecordDao> trainingRecordDaoList) {
 		
-		int	count = 0;
+		String[] conditionMenu = new String[2];
 		
-		for (TrainingRecord trainingRecord: trainingRecordList) {
+		conditionMenu[0] = CommonConst.INSERT_SUCCESS;
+		conditionMenu[1] = "";
+		
+		for (TrainingRecordDao trainingRecordDao: trainingRecordDaoList) {
 			
-			String sql = "INSERT "
-					+ "INTO TRAINING_RECORD( "
-					+ "    USER_ID"
-					+ "    , DATE_RECORD"
-					+ "    , TRAINING_MENU"
-					+ "    , WEIGHT"
-					+ "    , SET1"
-					+ "    , SET2"
-					+ "    , SET3"
-					+ "    , SET4"
-					+ "    , SET5"
-					+ "    , SET6"
-					+ "    , TOTAL"
-					+ "    , INSERT_DATE"
-					+ "    , INSERT_USER"
-					+ "    , UPDATE_DATE"
-					+ "    , UPDATE_USER"
-					+ "    , DELETE_FLAG"
-					+ ") "
-					+ "VALUES ( "
-					+ "    ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , ? "
-					+ "    , NOW()"
-					+ "    , ? "
-					+ "    , NOW()"
-					+ "    , ? "
-					+ "    , ? "
-					+ ")";
+			//該当トレーニングメニューで削除フラフ済みの物があるかチェックを行う
+			String selectSql = "select"
+					+ "    COUNT(*)"
+					+ "from"
+					+ "    TRAINING_RECORD "
+					+ "WHERE"
+					+ "    INSERT_DATE = ?"
+					+ "	   AND USER_ID = ?"
+					+ "	   AND TRAINING_MENU = ?"
+					+ "	   AND DELETE_FLAG = 1";
 			
-			count = jdbcTempate.update(sql,trainingRecord.getUserId(),trainingRecord.getDateRecord(),trainingRecord.getTrainingMenu(),
-					trainingRecord.getWeight(),trainingRecord.getSt1(),trainingRecord.getSt2(),
-					trainingRecord.getSt3(),trainingRecord.getSt4(),trainingRecord.getSt5(),trainingRecord.getSt6(),trainingRecord.getTotal(),
-					trainingRecord.getInsertUser(),trainingRecord.getUpdateUser(),trainingRecord.getDeleteFlag());
+			int count = jdbcTempate.queryForObject(selectSql, new Object[] { trainingRecordDao.getDateRecord(),trainingRecordDao.getInsertUser(),trainingRecordDao.getTrainingMenu()}, Integer.class);
+			
+			//有り
+			if (count > 0) {
+				String sql = "UPDATE TRAINING_RECORD "
+						+ "SET"
+						+ "    WEIGHT_KG = ? "
+						+ "    , SET1_COUNT = ? "
+						+ "    , SET2_COUNT = ? "
+						+ "    , SET3_COUNT = ? "
+						+ "    , SET4_COUNT = ? "
+						+ "    , SET5_COUNT = ? "
+						+ "    , SET6_COUNT = ? "
+						+ "    , TOTAL_COUNT = ? "
+						+ "    , UPDATE_DATE = NOW() "
+						+ "    , UPDATE_USER = ? "
+						+ "    , DELETE_FLAG = ? "
+						+ "WHERE"
+						+ "    USER_ID = ? "
+						+ "    AND DATE_RECORD = ? "
+						+ "    AND TRAINING_MENU = ? ";
+				
+				try {
+					jdbcTempate.update(sql,trainingRecordDao.getWeight(),trainingRecordDao.getSt1(),trainingRecordDao.getSt2(),
+							trainingRecordDao.getSt3(),trainingRecordDao.getSt4(),trainingRecordDao.getSt5(),trainingRecordDao.getSt6(),trainingRecordDao.getTotal(),
+							trainingRecordDao.getUpdateUser(),"0",trainingRecordDao.getUserId(),trainingRecordDao.getDateRecord(),trainingRecordDao.getTrainingMenu());
+					//message = CommonConst.UPDATE_COMPLATE;
+					
+				//エラーの場合ロールバック
+				} catch (Exception e) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					//message = CommonConst.UPDATE_ERROR;
+				}
+				
+			//無し
+			} else {
+				String insertSql = "INSERT "
+						+ "INTO TRAINING_RECORD( "
+						+ "    USER_ID"
+						+ "    , DATE_RECORD"
+						+ "    , TRAINING_MENU"
+						+ "    , WEIGHT_KG"
+						+ "    , SET1_COUNT"
+						+ "    , SET2_COUNT"
+						+ "    , SET3_COUNT"
+						+ "    , SET4_COUNT"
+						+ "    , SET5_COUNT"
+						+ "    , SET6_COUNT"
+						+ "    , TOTAL_COUNT"
+						+ "    , INSERT_DATE"
+						+ "    , INSERT_USER"
+						+ "    , UPDATE_DATE"
+						+ "    , UPDATE_USER"
+						+ "    , DELETE_FLAG"
+						+ ") "
+						+ "VALUES ( "
+						+ "    ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ? "
+						+ "    , ?"
+						+ "    , ? "
+						+ "    , NOW()"
+						+ "    , ? "
+						+ "    , ? "
+						+ ")";
+				
+				try {
+					jdbcTempate.update(insertSql,trainingRecordDao.getUserId(),trainingRecordDao.getDateRecord(),trainingRecordDao.getTrainingMenu(),
+							trainingRecordDao.getWeight(),trainingRecordDao.getSt1(),trainingRecordDao.getSt2(),
+							trainingRecordDao.getSt3(),trainingRecordDao.getSt4(),trainingRecordDao.getSt5(),trainingRecordDao.getSt6(),trainingRecordDao.getTotal(),
+							trainingRecordDao.getDateRecord(),trainingRecordDao.getInsertUser(),trainingRecordDao.getUpdateUser(),trainingRecordDao.getDeleteFlg());
+				
+				//既に同日に同じトレーニングのDBへの追加が行われていた場合の処理	
+				}catch (DuplicateKeyException e) {
+					//エラーの場合ロールバック
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					//同日実施されていたメニュー名を取得
+					conditionMenu[0] = CommonConst.INSERT_DUPLICATION_FAILURE;
+					conditionMenu[1] = trainingRecordDao.getTrainingMenu();
+					
+				//その他DB追加時のエラー時の処理	
+				} catch (Exception e) {
+					//エラーの場合ロールバック
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					
+					conditionMenu[0] = CommonConst.INSERT_FAILURE;
+				}
+				
+			}
 		}
+			
 		
-		return count;
+		return conditionMenu;
 	}
 	
 	/**
@@ -184,77 +280,119 @@ public class TrainingRecordRepository {
 	 * @param date [yyyymmdd]形式の年月日文字列
 	 * @return DB結果
 	 */
-	public List<TrainingRecord> selectTrainingRecord(String date) {
+	public List<TrainingRecordDao> selectTrainingRecord(String date, String userId) {
 		
 		String sql = "select"
 				+ "    TRAINING_MENU"
-				+ "    , WEIGHT"
-				+ "    , SET1"
-				+ "    , SET2"
-				+ "    , SET3"
-				+ "    , SET4"
-				+ "    , SET5"
-				+ "    , SET6"
-				+ "    , TOTAL "
+				+ "    , WEIGHT_KG"
+				+ "    , SET1_COUNT"
+				+ "    , SET2_COUNT"
+				+ "    , SET3_COUNT"
+				+ "    , SET4_COUNT"
+				+ "    , SET5_COUNT"
+				+ "    , SET6_COUNT"
+				+ "    , TOTAL_COUNT "
 				+ "from"
 				+ "    TRAINING_RECORD "
 				+ "WHERE"
-				+ "    DATE_RECORD = ?";
-
-		List<Map<String, Object>> resultList = jdbcTempate.queryForList(sql,date);
-		List<TrainingRecord> trainingRecordList = new ArrayList<TrainingRecord>();
-		for (Map<String, Object> result : resultList) {
-			TrainingRecord trainingRecord = new TrainingRecord();
-			trainingRecord.setTrainingMenu((String)result.get("TRAINING_MENU"));
-			trainingRecord.setWeight((String)result.get("WEIGHT"));
-			trainingRecord.setSt1((String)result.get("SET1"));
-			trainingRecord.setSt2((String)result.get("SET2"));
-			trainingRecord.setSt3((String)result.get("SET3"));
-			trainingRecord.setSt4((String)result.get("SET4"));
-			trainingRecord.setSt5((String)result.get("SET5"));
-			trainingRecord.setSt6((String)result.get("SET6"));
-			trainingRecord.setTotal((String)result.get("TOTAL"));
+				+ "    INSERT_DATE = ?"
+				+ "	   AND USER_ID = ?"
+				+ "	   AND DELETE_FLAG = 0";
+		
+		List<TrainingRecordDao> trainingRecordDaoList = new ArrayList<TrainingRecordDao>();
+		try {
+			List<Map<String, Object>> resultList = jdbcTempate.queryForList(sql,date,userId);
 			
-			trainingRecordList.add(trainingRecord);
+			for (Map<String, Object> result : resultList) {
+				TrainingRecordDao trainingRecordDao = new TrainingRecordDao();
+				trainingRecordDao.setTrainingMenu((String)result.get("TRAINING_MENU"));
+				trainingRecordDao.setWeight((String)result.get("WEIGHT_KG"));
+				trainingRecordDao.setSt1((String)result.get("SET1_COUNT"));
+				trainingRecordDao.setSt2((String)result.get("SET2_COUNT"));
+				trainingRecordDao.setSt3((String)result.get("SET3_COUNT"));
+				trainingRecordDao.setSt4((String)result.get("SET4_COUNT"));
+				trainingRecordDao.setSt5((String)result.get("SET5_COUNT"));
+				trainingRecordDao.setSt6((String)result.get("SET6_COUNT"));
+				trainingRecordDao.setTotal((String)result.get("TOTAL_COUNT"));
+				
+				trainingRecordDaoList.add(trainingRecordDao);
+			}	
+		} catch (Exception e) {
+			
+			return trainingRecordDaoList;
 		}
-		return trainingRecordList;
+		
+		return trainingRecordDaoList;
 	}
 	
 	/**
 	 * 実施するトレーニングを更新します。
 	 *
-	 * @param trainingRecordList トレーニング記録情報
+	 * @param trainingRecordDaoList トレーニング記録情報
 	 * @return DB結果
 	 */
-	public int updateTrainingRecord(List<TrainingRecord> trainingRecordList) {
+	public String updateTrainingRecord(List<TrainingRecordDao> trainingRecordDaoList) {
 		
-		int count = 0;
-		for (TrainingRecord trainingRecord: trainingRecordList) {
-			
-			String sql = "UPDATE TRAINING_RECORD "
-					+ "SET"
-					+ "    WEIGHT = ? "
-					+ "    , SET1 = ? "
-					+ "    , SET2 = ? "
-					+ "    , SET3 = ? "
-					+ "    , SET4 = ? "
-					+ "    , SET5 = ? "
-					+ "    , SET6 = ? "
-					+ "    , TOTAL = ? "
-					+ "    , UPDATE_DATE = NOW() "
-					+ "    , UPDATE_USER = ? "
-					+ "WHERE"
-					+ "    USER_ID = ? "
-					+ "    AND DATE_RECORD = ? "
-					+ "    AND TRAINING_MENU = ? ";
-			
-			count =  jdbcTempate.update(sql,trainingRecord.getWeight(),trainingRecord.getSt1(),trainingRecord.getSt2(),
-					trainingRecord.getSt3(),trainingRecord.getSt4(),trainingRecord.getSt5(),trainingRecord.getSt6(),trainingRecord.getTotal(),
-					trainingRecord.getUpdateUser(),trainingRecord.getUserId(),trainingRecord.getDateRecord(),trainingRecord.getTrainingMenu());
-			
+		String message = "";
+		
+		for (TrainingRecordDao trainingRecordDao: trainingRecordDaoList) {
+			//削除
+			if (trainingRecordDao.getDeleteFlg().equals("1")) {
+				String sql = "UPDATE TRAINING_RECORD "
+						+ "SET"
+						+ "    DELETE_FLAG = ? "
+						+ "    , UPDATE_DATE = NOW() "
+						+ "    , UPDATE_USER = ? "
+						+ "WHERE"
+						+ "    USER_ID = ? "
+						+ "    AND DATE_RECORD = ? "
+						+ "    AND TRAINING_MENU = ? ";
+				
+				try {
+					jdbcTempate.update(sql,trainingRecordDao.getDeleteFlg(),trainingRecordDao.getUpdateUser(),
+							trainingRecordDao.getUserId(),trainingRecordDao.getDateRecord(),trainingRecordDao.getTrainingMenu());
+					message = CommonConst.UPDATE_COMPLATE;
+					
+				//エラーの場合ロールバック
+				} catch (Exception e) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					message = CommonConst.UPDATE_ERROR;
+				}
+				
+			//更新
+			}else if (trainingRecordDao.getDeleteFlg().equals("0")) {
+				String sql = "UPDATE TRAINING_RECORD "
+						+ "SET"
+						+ "    WEIGHT_KG = ? "
+						+ "    , SET1_COUNT = ? "
+						+ "    , SET2_COUNT = ? "
+						+ "    , SET3_COUNT = ? "
+						+ "    , SET4_COUNT = ? "
+						+ "    , SET5_COUNT = ? "
+						+ "    , SET6_COUNT = ? "
+						+ "    , TOTAL_COUNT = ? "
+						+ "    , UPDATE_DATE = NOW() "
+						+ "    , UPDATE_USER = ? "
+						+ "WHERE"
+						+ "    USER_ID = ? "
+						+ "    AND DATE_RECORD = ? "
+						+ "    AND TRAINING_MENU = ? ";
+				
+				try {
+					jdbcTempate.update(sql,trainingRecordDao.getWeight(),trainingRecordDao.getSt1(),trainingRecordDao.getSt2(),
+							trainingRecordDao.getSt3(),trainingRecordDao.getSt4(),trainingRecordDao.getSt5(),trainingRecordDao.getSt6(),trainingRecordDao.getTotal(),
+							trainingRecordDao.getUpdateUser(),trainingRecordDao.getUserId(),trainingRecordDao.getDateRecord(),trainingRecordDao.getTrainingMenu());
+					message = CommonConst.UPDATE_COMPLATE;
+					
+				//エラーの場合ロールバック
+				} catch (Exception e) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					message = CommonConst.UPDATE_ERROR;
+				}
+			}
 		}
 		
-		return count;
+		return message;
 	}
 	
 }
