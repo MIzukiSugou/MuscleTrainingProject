@@ -36,7 +36,7 @@ public class TrainingRecordRepository {
 	 * @param userId   ユーザID
 	 * @return レコード数
 	 */
-	public int checkUserIdMenu(String userId, String dateRecord) {
+	public boolean checkUserIdMenu(String userId, String dateRecord) {
 
 		String sql = "SELECT "
 				+ "    COUNT(*) "
@@ -57,8 +57,15 @@ public class TrainingRecordRepository {
 				+ "    )";
 
 		int count = jdbcTempate.queryForObject(sql, new Object[] { userId, dateRecord, userId}, Integer.class);
-
-		return count;
+		
+        //ログインユーザーIDでトレーニングメニューが存在無し
+        if (count== 0) {
+            return true;
+        
+        //ログインユーザーIDでトレーニングメニューが存在有り       
+        }else {
+            return false;
+        }
 	}
 	
 	/**
@@ -67,7 +74,7 @@ public class TrainingRecordRepository {
 	 * @param userId   ユーザID
 	 * @return レコード数
 	 */
-	public int checkUserIdTrainingRecord(String userId, String dateRecord) {
+	public boolean checkUserIdTrainingRecord(String userId, String dateRecord) {
 
 		String sql = "SELECT"
 				+ "    COUNT(*)"
@@ -79,8 +86,15 @@ public class TrainingRecordRepository {
 				+ "    AND DELETE_FLAG = 0";
 
 		int count = jdbcTempate.queryForObject(sql, new Object[] { userId,dateRecord}, Integer.class);
-
-		return count;
+		
+	    //ログインユーザーIDでトレーニング記録無し
+	    if (count== 0) {
+	        return true;
+	    
+	    //ログインユーザーIDでトレーニング記録有り
+	    }else {
+	    	return false;
+	    }		
 	}
 	
 	/**
