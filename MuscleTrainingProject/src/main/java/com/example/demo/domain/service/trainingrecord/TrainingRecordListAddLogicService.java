@@ -33,14 +33,18 @@ public class TrainingRecordListAddLogicService {
 	
 	 /** trainingRecordFormListAddのプルダウン表示用
 	 * トレーニングメニュー情報を取得
-	 * @param trainingRecordForm トレーニング記録画面フォーム
-	 * @param session セッション情報
+	 * @param trainingRecordForm ：トレーニング記録画面フォーム
+	 * @param session：セッション情報
+	 * 
+	 * @return menuMap：DBから取得したユーザーのトレーニングメニュー情報をHashMapで取得
 	 */
 	public Map<String, String> selectMenu(TrainingRecordForm trainingRecordForm)  {
 		
 		//DBからトレーニングメニューの取得
 		List<String> menuList = repository.selectMenu(trainingRecordForm.getUserId(), trainingRecordForm.getDate());
           
+		menuList = menuSettings(trainingRecordForm, endIndex(trainingRecordForm), menuList);
+		
 		//Map型に変換
 		Map<String, String> menuMap = new LinkedHashMap<String, String>();
 		for (int i = -1; i < menuList.size(); i++) {
@@ -54,8 +58,33 @@ public class TrainingRecordListAddLogicService {
    }
 	
 	/**
+	 * trainingRecordFormListAddのメニュープルダウンの編集処理
+	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @param endIndex 入力箇所最終indexを返却
+	 * @param menuList プルダウン表示用リスト
+	 * @return menuList 既に選択（表示）済みのメニューは削除して返却
+	 */
+	public List<String> menuSettings(TrainingRecordForm trainingRecordForm,
+			int endIndex,
+			List<String> menuList
+			) {
+		//trainingRecordFormListで選択済みのプルダウン内容の削除
+		for (int i = 0; i < endIndex; i++) {
+			String daleteMenu = trainingRecordForm.getTrainingRecordListAdd().get(i).getMenu();
+//			String daleteMenu = trainingRecordForm.getTrainingRecordListAdd().get(endIndex).getMenuMap().get(trainingRecordForm.getMenuKey());
+			for (int removeIndex = 0; removeIndex < menuList.size(); removeIndex++) {
+				if (daleteMenu.equals(menuList.get(removeIndex))) {
+					menuList.remove(removeIndex);
+				}
+			}
+		}
+		return menuList;
+	}
+	
+	/**
 	 * trainingRecordFormListAddの初期化処理
 	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @return trainingRecordForm トレーニング記録画面フォーム
 	 */
 	public TrainingRecordForm stateInitializationtate(TrainingRecordForm trainingRecordForm
 			) {
@@ -64,12 +93,10 @@ public class TrainingRecordListAddLogicService {
 		trainingRecordFormListAdd.add(trainingRecordListForm);
         trainingRecordForm.setTrainingRecordListAdd(trainingRecordFormListAdd);
         
-        int endIndex = endIndex(trainingRecordForm);
         
-        //DBからログイン中のトレーニングメニューを取得
-        Map<String, String> menuMap = selectMenu(trainingRecordForm);
-        
-        menuSettings(trainingRecordForm, endIndex, menuMap);
+        trainingRecordForm.setTrainingRecordListAdd(menuEditing(trainingRecordForm,
+						selectMenu(trainingRecordForm),endIndex(trainingRecordForm),
+						CommonConst.INITIAL));
         
         return trainingRecordForm;
 	}
@@ -77,6 +104,7 @@ public class TrainingRecordListAddLogicService {
 	/**
 	 * trainingRecordFormListAddの追加処理
 	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @return trainingRecordForm トレーニング記録画面フォーム
 	 */
 	public TrainingRecordForm stateAdd(TrainingRecordForm trainingRecordForm
 			) {
@@ -87,15 +115,14 @@ public class TrainingRecordListAddLogicService {
         
         int endIndex = endIndex(trainingRecordForm);
         
-        //DBからログイン中のトレーニングメニューを取得
-        Map<String, String> menuMap = selectMenu(trainingRecordForm);
         //menuMapのvalue(トレーニングメニュー)を格納
-		trainingRecordForm.getTrainingRecordListAdd().get(endIndex-1).setMenu(menuMap.get(trainingRecordForm.getMenuKey()));
-		//menuMapのkeyを格納
-		trainingRecordForm.getTrainingRecordListAdd().get(endIndex-1).setMenuKey(trainingRecordForm.getMenuKey());
-		
-		menuSettings(trainingRecordForm, endIndex, menuMap);
-		
+        trainingRecordForm.getTrainingRecordListAdd().get(endIndex-1).setMenu(
+        		trainingRecordForm.getMenu());
+        
+        trainingRecordForm.setTrainingRecordListAdd(menuEditing(trainingRecordForm,
+				selectMenu(trainingRecordForm),endIndex(trainingRecordForm),
+				CommonConst.ADD));
+        
 		return trainingRecordForm;
 	}
 	
@@ -103,51 +130,58 @@ public class TrainingRecordListAddLogicService {
 	 * trainingRecordFormListAddの削除処理
 	 * @param trainingRecordForm トレーニング記録画面フォーム
 	 * @param trainingMenuIndex　削除時index その他は999999999 
+	 * @return trainingRecordForm トレーニング記録画面フォーム
 	 */
 	public TrainingRecordForm stateDelete(TrainingRecordForm trainingRecordForm,
-			int trainingMenuIndex
-			) {
+			int trainingMenuIndex) {
 		trainingRecordForm.getTrainingRecordListAdd().remove(trainingMenuIndex);
 		
-		int endIndex = endIndex(trainingRecordForm);
-		
-		//DBからログイン中のトレーニングメニューを取得
-        Map<String, String> menuMap = selectMenu(trainingRecordForm);
-        
-        menuSettings(trainingRecordForm, endIndex, menuMap);
+		trainingRecordForm.setTrainingRecordListAdd(menuEditing(trainingRecordForm,
+				selectMenu(trainingRecordForm),endIndex(trainingRecordForm),
+				CommonConst.DALETE));
         
         return trainingRecordForm;
 	}
 	
 	/**
-	 * trainingRecordFormListAddの入力箇所最終indexを返却
+	 * 追加記録用（trainingRecordListAdd）にメニュープルダウン（menuMap）を格納
+	 * 追加記録用（trainingRecordListAdd）のmenu,keyに値を格納
+	 * 
 	 * @param trainingRecordForm トレーニング記録画面フォーム
+	 * @param menuMap プルダウン表示用HashMap
+	 * @param endIndex trainingRecordFormListAddの入力箇所最終index
+	 * @param state　ボタン分岐
+	 * 
+	 * @return trainingRecordListAdd 追加記録用のリストを返却
+	 */
+	public List<TrainingRecordListForm> menuEditing(TrainingRecordForm trainingRecordForm
+			,Map<String, String> menuMap, int endIndex, String state) {
+		
+		List<TrainingRecordListForm> trainingRecordListAdd = trainingRecordForm.getTrainingRecordListAdd();
+		
+		for (int i = 0; i < endIndex; i++) {
+			for (int keyIndex = 0; keyIndex < menuMap.size(); keyIndex++) {
+				if (trainingRecordListAdd.get(i).getMenu().equals(menuMap.get("00" + (keyIndex + 1)))) {
+					trainingRecordListAdd.get(i).setMenuKey("00" + (keyIndex + 1));
+				}
+			}
+		}
+		//メニュープルダウンを格納
+		trainingRecordListAdd.get(endIndex).setMenuMap(menuMap);
+		
+		return trainingRecordListAdd;
+	}
+	
+	/**
+	 * trainingRecordFormListAddの入力箇所最終indexを返却
+	 * @param trainingRecordForm：トレーニング記録画面フォーム
+	 * @return endIndex：trainingRecordFormListAddの入力箇所最終index
 	 */
 	public int endIndex(TrainingRecordForm trainingRecordForm
 			) {
 		int endIndex = trainingRecordForm.getTrainingRecordListAdd().size()-1;
 		trainingRecordForm.setTrainingRecordFormAddListEndIndex(trainingRecordForm.getTrainingRecordListAdd().size()-1);
 		return endIndex;
-		
-	}
-	
-	/**
-	 * trainingRecordFormListAddのメニュープルダウンの編集処理
-	 * @param trainingRecordForm トレーニング記録画面フォーム
-	 * @param endIndex 入力箇所最終indexを返却
-	 * @param menuMap プルダウン表示用
-	 * 
-	 */
-	public void menuSettings(TrainingRecordForm trainingRecordForm,
-			int endIndex,
-			Map<String, String> menuMap
-			) {
-		//trainingRecordFormListで選択済みのプルダウン内容の削除
-		for (int i = 0; i < endIndex;i++) {
-			menuMap.remove(trainingRecordForm.getTrainingRecordListAdd().get(i).getMenuKey());
-		}
-		//trainingRecordFormの最終位置にメニューのプルダウンを格納
-		trainingRecordForm.getTrainingRecordListAdd().get(endIndex).setMenuMap(menuMap);
 		
 	}
 	

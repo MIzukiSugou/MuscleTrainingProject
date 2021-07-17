@@ -42,6 +42,10 @@ public class CommonConst {
 	 * トレーニング記録リスト　処理フラグ：（削除） */
     public static final String DALETE = "DALETE";
     
+    /** 
+	 * トレーニング記録リスト　処理フラグ：（更新） */
+    public static final String UPDATE = "UPDATE";
+    
 	/** 
 	 * DB更新用　削除フラグ ：　(無)*/
     public static final String DELETE_FLG_ZERO = "0";

@@ -1,6 +1,7 @@
 package com.example.demo.domain.service.trainingrecord;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -84,7 +85,7 @@ public class TrainingRecordService {
 		
 		// ログインユーザーIDトレーニングメニュー有り
 		if (!(repository.checkUserIdMenu(trainingRecordForm.getUserId(), trainingRecordForm.getDate()))) {
-			
+			trainingRecordListAddLogicService.stateInitializationtate(trainingRecordForm);
 		// ログインユーザーIDトレーニングメニュー無し
 		} else {
 			trainingRecordListEditingLogicService.initialization(trainingRecordForm);
@@ -178,7 +179,7 @@ public class TrainingRecordService {
 	}
 	
 	/**
-	 * 実施するトレーニングを更新
+	 * 実施済みのトレーニングを更新
 	 * @param session セッション情報
 	 * @param trainingRecordForm トレーニング記録画面フォーム
 	 * @param model モデル情報
@@ -196,8 +197,12 @@ public class TrainingRecordService {
 		selectTrainingRecord(trainingRecordForm);
 		model.addAttribute("message",  message);
 		
-		//追加記録用のプルダウンを再生成
-		trainingRecordListAddLogicService.stateInitializationtate(trainingRecordForm);
+		trainingRecordForm.setTrainingRecordListAdd(
+				trainingRecordListAddLogicService.menuEditing(trainingRecordForm,
+						trainingRecordListAddLogicService.selectMenu(trainingRecordForm),
+						trainingRecordListAddLogicService.endIndex(trainingRecordForm),
+						CommonConst.UPDATE));
+		;
 		
 		return "/trainingrecord_boot";
 	}

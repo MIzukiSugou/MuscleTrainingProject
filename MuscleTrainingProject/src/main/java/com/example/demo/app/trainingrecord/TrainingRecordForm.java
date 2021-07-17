@@ -70,13 +70,13 @@ public class TrainingRecordForm implements Serializable{
 		this.userId = userId;
 	}
 
-	public String getMenuKey() {
-		return menuKey;
-	}
-
-	public void setMenuKey(String menuKey) {
-		this.menuKey = menuKey;
-	}
+//	public String getMenuKey() {
+//		return menuKey;
+//	}
+//
+//	public void setMenuKey(String menuKey) {
+//		this.menuKey = menuKey;
+//	}
 
 	public String getRecordBtnControl() {
 		return recordBtnControl;

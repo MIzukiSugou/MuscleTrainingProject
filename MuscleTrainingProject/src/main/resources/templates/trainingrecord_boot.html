@@ -86,8 +86,8 @@
 							<!-- listの最終行のみ表示 -->
 							<th:block th:if="*{#lists.size(trainingRecordListAdd)-1} == ${stat.index}" >
 								<td style="width: 374.43px;" class="center">
-									<select id="menu" name="menuKey">
-										<option th:each="menu: *{trainingRecordListAdd[__${stat.index}__].menuMap}" th:value="${menu.key}" th:inline="text">[[${menu.value}]]</option>
+									<select id="menu" name="menu">
+										<option th:each="menu: *{trainingRecordListAdd[__${stat.index}__].menuMap}" th:value="${menu.value}" th:inline="text">[[${menu.value}]]</option>
 									</select>
 									<button id="menuInputButton" type="submit" class="btn btn-secondary" name="add">追加</button>
 								</td>
